@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="theme-color" content="#0a1320">
+<title>Internal Computer • Virtual 16-bit Workstation</title>
+<style>
+:root{color-scheme:dark;--base:#070d16;--panel:#0d1624;--panel2:#111e2e;--panel3:#142236;--line:#263346;--text:#dce8f3;--muted:#8195ab;--accent:#55d9c3;--blue:#78a9ff;--gold:#ffc879;--red:#fa817f;--font:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--base);color:var(--text);font-size:13px}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{height:70px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 22px;border-bottom:1px solid var(--line);background:#0a1320;flex:none}
+.brand{display:flex;align-items:center;gap:13px;min-width:0}
+.mark{width:41px;height:41px;display:grid;place-items:center;border:1px solid #286e6c;background:#143b3d;border-radius:12px;font:700 21px var(--font);color:var(--accent)}
+.brand h1{font-size:17px;letter-spacing:.045em;margin:0;font-weight:750}
+.brand p{font:10px var(--font);color:var(--muted);letter-spacing:.08em;margin:5px 0 0}
+.topactions,.controls,.file-actions,.panel-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid #33465b;background:#142334;border-radius:7px;padding:9px 11px;color:#bcd0e5;letter-spacing:.02em;font-weight:650;font-size:11px;transition:background .1s ease}
+.btn:hover{background:#1e3349}
+.btn.primary{background:#124940;border-color:#1c806e;color:#b9fff2}
+.btn.primary:hover{background:#166656}
+.btn.warn{color:#ffbeb8}
+.btn.small{padding:6px 8px;font-size:10px}
+.workspace{display:grid;grid-template-columns:240px minmax(0,1fr) 275px;min-height:0;flex:1;height:calc(100vh - 105px)}
+.left,.right{background:var(--panel);min-height:0;overflow-y:auto}
+.left{border-right:1px solid var(--line);display:flex;flex-direction:column}
+.right{border-left:1px solid var(--line)}
+.left-section,.inspector-section{padding:16px 14px;border-bottom:1px solid var(--line)}
+.section-label{font:700 10px var(--font);letter-spacing:.13em;color:#7894ad;margin:0 0 13px}
+.muted{color:var(--muted)}
+.nav-title{font-weight:700;color:#e6f1fa;font-size:12px}
+.file-actions{margin-top:10px}
+.file-scroller{padding:8px 7px 10px;overflow-y:auto;flex:1}
+.file-entry{display:flex;gap:9px;align-items:center;width:100%;border:0;border-radius:6px;text-align:left;padding:7px 8px;background:transparent;color:#aebfd1;font:11px var(--font)}
+.file-entry:hover{background:#18283a}
+.file-entry.active{background:#153a41;color:#9af3df}
+.file-icon{min-width:12px;color:#72d9c6;font-size:12px}
+.file-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.diskbar{height:5px;border-radius:8px;background:#243647;overflow:hidden;margin:12px 0 8px}
+.diskfill{height:100%;background:linear-gradient(90deg,#3cccb4,#9ee4ad);width:0;transition:width .2s}
+.disknumbers{font:10px var(--font);color:#a5b7ca;display:flex;justify-content:space-between;gap:8px}
+#disk-count{font:10px var(--font);color:#71869e;margin-top:9px}
+.center{min-height:0;min-width:0;display:flex;flex-direction:column;background:#080f19}
+.panelhead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);background:#0e1826}
+.panelhead strong{font:700 11px var(--font);letter-spacing:.09em}
+.smalltag{font:700 10px var(--font);border:1px solid #28574e;background:#15382f;color:#83dbbc;padding:5px 8px;border-radius:5px}
+.editor-panel{min-height:175px;display:flex;flex-direction:column;flex:1 1 54%}
+.pathbar{display:flex;align-items:center;gap:10px;padding:9px 16px;background:#0b1622;border-bottom:1px solid #1e3044;font:11px var(--font);color:#7390aa}
+.pathbar input{min-width:0;flex:1;border:none;background:transparent;color:#bdcfdf;font:11px var(--font);outline:none}
+#editor{flex:1;resize:none;background:#09121e;border:0;padding:19px 19px;outline:none;font:12px/1.8 var(--font);color:#cce6e9;white-space:pre;overflow:auto;tab-size:2}
+#editor:focus{outline:none}
+.terminal-panel{height:41%;min-height:240px;display:flex;flex-direction:column;border-top:1px solid #314155}
+.terminal-head{background:#111d2c}
+.terminal{flex:1;min-height:0;overflow:auto;padding:13px 16px;background:#060d16;font:11px/1.65 var(--font);color:#b8cddd;overflow-wrap:anywhere}
+.term-line{white-space:pre-wrap;min-height:1.6em}
+.term-line.command{color:#9cb8e9;margin-top:4px}
+.term-line.program{color:#e9ddbb}
+.term-line.success{color:#83dfc4}
+.term-line.error{color:#ff9696}
+.term-line.muted{color:#71869e}
+.commandbar{padding:11px 13px;display:flex;gap:9px;align-items:center;border-top:1px solid #1a2c40;background:#0d1b2a;font:11px var(--font);white-space:nowrap}
+#prompt-prefix{color:var(--accent)}
+#terminal-input{background:transparent;border:0;min-width:30px;flex:1;outline:none;font:12px var(--font);color:white}
+.stats-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:16px}
+.state{display:inline-block;padding:6px 8px;border:1px solid #35475e;color:#b2c5d7;background:#1d2e40;font:700 10px var(--font);border-radius:5px}
+.state[data-state=running]{color:#9ff5d7;background:#1b5043;border-color:#318d6f}
+.state[data-state=fault]{color:#ffbab7;background:#5b292c;border-color:#af5156}
+.state[data-state=ready]{color:#b9d3ff;background:#203b61;border-color:#436aa0}
+.inspector-label{color:#849ab0;font:10px var(--font);letter-spacing:.08em}
+.inspector-value{font:13px var(--font);color:#d6e7f6}
+.kv{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px}
+.register-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.reg{border:1px solid #293d53;border-radius:7px;background:#121f30;padding:9px 10px}
+.regtop{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.reg b{font:700 11px var(--font);color:#85a5bf}
+.reg code{font:700 13px var(--font);color:#a9efdd}
+.reg span{display:block;margin-top:5px;color:#6e879b;font:10px var(--font);text-align:right}
+.memory-controls{display:flex;gap:8px;margin:8px 0 12px}
+.memory-controls input{min-width:0;width:100%;border:1px solid #30445b;border-radius:6px;padding:7px;background:#0a1522;font:11px var(--font)}
+#memory-view{margin:0;padding:10px 8px;background:#07101b;border:1px solid #26394f;border-radius:7px;overflow-x:auto;color:#a6d3d8;line-height:1.75;font:9.5px/1.8 var(--font)}
+.bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 16px;background:#0a1320;border-top:1px solid var(--line);min-height:35px;color:#8198ad;font:10px var(--font)}
+.bottom .warning{color:var(--red)}
+.dot{display:inline-block;background:#47d5af;width:6px;height:6px;border-radius:100%;margin-right:5px}
+.kbd{font:10px var(--font);border:1px solid #3a4b5b;padding:3px 5px;border-radius:4px;color:#8fa4b6}
+@media(max-width:1120px){.workspace{grid-template-columns:185px minmax(0,1fr) 240px}.left-section,.inspector-section{padding:13px 10px}.topbar{padding:10px 12px}.btn{padding:8px 9px}}
+@media(max-width:810px){.workspace{display:flex;flex-direction:column;height:auto}.left{order:2;overflow:visible;border-top:1px solid var(--line);border-right:0;max-height:270px}.left .file-scroller{max-height:160px}.center{order:1;min-height:700px}.right{order:3;display:grid;grid-template-columns:1fr 1fr;border-left:0;border-top:1px solid var(--line);overflow:visible}.right .inspector-section{border-right:1px solid var(--line)}.topbar{height:auto;min-height:70px;flex-wrap:wrap}.topactions{justify-content:flex-start}.editor-panel{min-height:385px}.terminal-panel{min-height:300px}.bottom{flex-wrap:wrap}}
+@media(max-width:520px){.right{grid-template-columns:1fr}.topbar{align-items:flex-start}.brand h1{font-size:15px}.brand p{font-size:9px}.topactions .btn{padding:8px 9px}.panelhead{padding:10px}.pathbar{padding:9px 11px}.commandbar{flex-wrap:wrap}#prompt-prefix{font-size:10px}#editor{font-size:11px;padding:13px}.terminal{padding:11px}}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="mark" aria-hidden="true">⌘</div><div><h1>INTERNAL COMPUTER <span style="color:#6ee0c7">/</span> 01</h1><p>VIRTUAL WORKSTATION · 16 BIT · LOCAL SANDBOX</p></div></div>
+    <div class="topactions" role="toolbar" aria-label="Virtual computer controls">
+      <button class="btn primary" id="btn-run">▶ RUN</button>
+      <button class="btn" id="btn-step">↳ STEP</button>
+      <button class="btn" id="btn-pause">Ⅱ PAUSE</button>
+      <button class="btn warn" id="btn-reset">⟳ RESET CPU</button>
+      <button class="btn" id="btn-export">⇩ BACKUP</button>
+      <button class="btn" id="btn-import">⇧ RESTORE</button>
+    </div>
+  </header>
+  <div class="workspace">
+    <aside class="left" aria-label="Virtual file explorer">
+      <section class="left-section">
+        <p class="section-label">VIRTUAL FILESYSTEM</p>
+        <div class="nav-title">/ root</div>
+        <p class="muted" style="font-size:11px;margin:9px 0 0">Sandboxed, browser-local storage. No host device access.</p>
+        <div class="file-actions"><button id="btn-new" class="btn small">+ NEW FILE</button><button id="btn-save" class="btn small">SAVE FILE</button></div>
+      </section>
+      <div class="file-scroller" id="file-list" aria-label="Files and directories"></div>
+      <section class="left-section">
+        <p class="section-label">SAMPLE PROGRAMS</p>
+        <div class="file-actions"><button class="btn small" id="btn-open-fib">FIBONACCI</button><button class="btn small" id="btn-open-mem">MEMORY</button><button class="btn small" id="btn-open-hello">HELLO</button></div>
+      </section>
+      <section class="left-section"><p class="section-label">VIRTUAL DISK</p><div class="disknumbers"><span>USAGE</span><span id="disk-used">0 / 1024 KiB</span></div><div class="diskbar"><div class="diskfill" id="disk-bar"></div></div><div id="disk-count">0 entries</div><div id="save-state" class="muted" style="font:10px var(--font);margin-top:12px">LOCAL DISK</div></section>
+    </aside>
+    <main class="center">
+      <section class="editor-panel" aria-label="Assembly source editor">
+        <div class="panelhead"><strong>◈ ASSEMBLY EDITOR</strong><div class="panel-actions"><span class="smalltag" id="editor-indicator">SAVED</span><span class="kbd">Ctrl+S</span></div></div>
+        <div class="pathbar"><span>FILE</span><input id="editor-path" type="text" spellcheck="false" aria-label="Current virtual file path" value="/programs/fibonacci.asm"><span>.ASM</span></div>
+        <textarea id="editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Assembly source code"></textarea>
+      </section>
+      <section class="terminal-panel" aria-label="Virtual terminal">
+        <div class="panelhead terminal-head"><strong>&gt;_ VIRTUAL TERMINAL</strong><button id="btn-terminal-clear" class="btn small">CLEAR</button></div>
+        <div class="terminal" id="terminal-output" role="log" aria-live="polite" aria-relevant="additions text"></div>
+        <div class="commandbar"><span id="prompt-prefix">guest@internal:~$</span><input type="text" id="terminal-input" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Virtual shell command" placeholder="help" maxlength="1000"><button class="btn small" id="btn-focus-terminal">⌁</button></div>
+      </section>
+    </main>
+    <aside class="right" aria-label="CPU and memory inspector">
+      <section class="inspector-section"><p class="section-label">PROCESSOR STATE</p><div class="stats-row"><span class="state" id="run-state">OFFLINE</span><span class="inspector-label" id="machine-instructions">0 INSTRUCTIONS</span></div><div class="kv"><span class="inspector-label">LOADED</span><span class="inspector-value" id="loaded-label">NONE</span></div><div class="kv"><span class="inspector-label">PC</span><span class="inspector-value" id="pc">0000</span></div><div class="kv"><span class="inspector-label">SP</span><span class="inspector-value" id="sp">FFFE</span></div><div class="kv"><span class="inspector-label">CYCLES</span><span class="inspector-value" id="cycles">0</span></div><div class="kv"><span class="inspector-label">FLAGS</span><span class="inspector-value" id="flags">Z 0 G 0 L 0</span></div></section>
+      <section class="inspector-section"><p class="section-label">16-BIT REGISTERS</p><div class="register-grid">
+        <div class="reg"><div class="regtop"><b>R0</b><code id="r0">0000</code></div><span id="rv0">0</span></div>
+        <div class="reg"><div class="regtop"><b>R1</b><code id="r1">0000</code></div><span id="rv1">0</span></div>
+        <div class="reg"><div class="regtop"><b>R2</b><code id="r2">0000</code></div><span id="rv2">0</span></div>
+        <div class="reg"><div class="regtop"><b>R3</b><code id="r3">0000</code></div><span id="rv3">0</span></div>
+        <div class="reg"><div class="regtop"><b>R4</b><code id="r4">0000</code></div><span id="rv4">0</span></div>
+        <div class="reg"><div class="regtop"><b>R5</b><code id="r5">0000</code></div><span id="rv5">0</span></div>
+        <div class="reg"><div class="regtop"><b>R6</b><code id="r6">0000</code></div><span id="rv6">0</span></div>
+        <div class="reg"><div class="regtop"><b>R7</b><code id="r7">0000</code></div><span id="rv7">0</span></div>
+      </div></section>
+      <section class="inspector-section"><p class="section-label">RAM MONITOR · 64 KiB</p><div class="memory-controls"><input type="text" id="memory-offset" value="0x0000" aria-label="RAM offset"><button class="btn small" id="btn-memory">GO</button></div><pre id="memory-view">0000</pre></section>
+      <section class="inspector-section"><p class="section-label">ISOLATION BOUNDARY</p><p class="muted" style="font-size:11px;line-height:1.65">Programs run inside a restricted instruction interpreter. They cannot run host shell commands, fetch network content, or inspect real device files.</p></section>
+    </aside>
+  </div>
+  <footer class="bottom"><span id="status-note"><span class="dot"></span> Initializing virtual computer</span><span>100,000 CYCLE LIMIT · 1 MiB VIRTUAL DISK · NO EXTERNAL DEPENDENCIES</span></footer>
+</div>
+<input id="import-file" type="file" accept=".json,application/json" hidden>
+<script>
+/* Internal Computer: deterministic, offline, 16-bit virtual machine.
+ * No eval(), Function(), remote requests, or access to host files/processes.
+ */
+(function (root, factory) {
+  const api = factory();
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  root.VComputerCore = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+  const FS_LIMIT = 1024 * 1024;
+  const FILE_LIMIT = 128 * 1024;
+  const ENTRY_LIMIT = 500;
+  const MAX_PATH = 256;
+  const MAX_SOURCE_LINES = 5000;
+  const MAX_INSTRUCTIONS = 3000;
+  const RAM_SIZE = 65536;
+  const CYCLE_LIMIT = 100000;
+  const utf8Size = s => new TextEncoder().encode(s).length;
+  const assert = (ok, message) => { if (!ok) throw new Error(message); };
+  const clone = obj => JSON.parse(JSON.stringify(obj));
+  const normal = (path, cwd = '/home/guest') => {
+    assert(typeof path === 'string' && path.length > 0 && !path.includes('\0'), 'Invalid path');
+    let p = path === '~' ? '/home/guest' : path.startsWith('~/') ? '/home/guest/' + path.slice(2) : path;
+    if (!p.startsWith('/')) p = cwd + '/' + p;
+    const parts = [];
+    for (const bit of p.split('/')) {
+      if (bit === '' || bit === '.') continue;
+      if (bit === '..') { parts.pop(); continue; }
+      assert(bit.length <= 100 && !/[\x00-\x1f]/.test(bit), 'Invalid path segment');
+      parts.push(bit);
+    }
+    const result = '/' + parts.join('/');
+    assert(result.length <= MAX_PATH, 'Path too long');
+    return result;
+  };
+  const parentOf = path => path === '/' ? null : (path.slice(0, path.lastIndexOf('/')) || '/');
+  class VirtualFS {
+    constructor(seed = true) {
+      this.entries = { '/': { type: 'dir' } };
+      if (seed) this.seed();
+    }
+    seed() {
+      for (const dir of ['/home', '/home/guest', '/programs', '/docs']) this.mkdir(dir);
+      this.write('/programs/hello.asm', '; 16-bit VM: Hello World\nPRINT "Hello from the internal computer."\nPRINT "The CPU is virtual. Your files stay in this browser."\nHALT\n');
+      this.write('/programs/fibonacci.asm', '; First ten Fibonacci numbers\nPRINT "Fibonacci:"\nMOV R0, 0\nMOV R1, 1\nMOV R2, 10\nloop:\n  PRINT R0\n  MOV R3, R1\n  ADD R3, R0\n  MOV R0, R1\n  MOV R1, R3\n  DEC R2\n  JNZ loop\nHALT\n');
+      this.write('/programs/memory.asm', '; Store/load a 16-bit number in virtual RAM\nMOV R0, 918\nSTORE [0x0100], R0\nLOAD R1, [0x0100]\nPRINT "Value loaded from RAM:"\nPRINT R1\nHALT\n');
+      this.write('/programs/countdown.asm', '; Countdown using a conditional jump\nMOV R0, 5\nagain:\n  PRINT R0\n  DEC R0\n  JNZ again\nPRINT "Liftoff"\nHALT\n');
+      this.write('/docs/README.txt', 'INTERNAL COMPUTER v1\n\nOpen .asm programs from /programs.\nUse Run to execute or Step to inspect individual instructions.\nCPU: 8 x 16-bit registers, 64 KiB RAM, labels and instructions.\nVirtual filesystem persists in local browser storage.\nNo host shell, network, device, or external AI access.\nType help in the terminal for commands.\n');
+    }
+    path(path, cwd) { return normal(path, cwd); }
+    get(path, cwd) { const p = normal(path, cwd); return this.entries[p] || null; }
+    mustGet(path, cwd) { const p = normal(path, cwd); assert(this.entries[p], 'Not found: ' + p); return this.entries[p]; }
+    mustParent(p) { const parent = parentOf(p); assert(parent !== null && this.entries[parent]?.type === 'dir', 'Parent directory missing: ' + parent); }
+    mkdir(path, cwd) {
+      const p = normal(path, cwd);
+      assert(p !== '/' && !this.entries[p], 'Already exists: ' + p);
+      this.mustParent(p);
+      assert(Object.keys(this.entries).length < ENTRY_LIMIT, 'Filesystem entry limit reached');
+      this.entries[p] = { type: 'dir' };
+      return p;
+    }
+    write(path, content, cwd) {
+      const p = normal(path, cwd);
+      assert(typeof content === 'string', 'File content must be text');
+      assert(utf8Size(content) <= FILE_LIMIT, 'File exceeds 128 KiB limit');
+      this.mustParent(p);
+      assert(!this.entries[p] || this.entries[p].type === 'file', 'Cannot overwrite directory');
+      const old = this.entries[p]?.type === 'file' ? utf8Size(this.entries[p].content) : 0;
+      const used = this.usage() - old + utf8Size(content);
+      assert(used <= FS_LIMIT, 'Virtual disk full (1 MiB limit)');
+      assert(this.entries[p] || Object.keys(this.entries).length < ENTRY_LIMIT, 'Filesystem entry limit reached');
+      this.entries[p] = { type: 'file', content };
+      return p;
+    }
+    read(path, cwd) { const p = normal(path, cwd); const e = this.mustGet(p); assert(e.type === 'file', 'Not a file: ' + p); return e.content; }
+    list(path = '.', cwd = '/home/guest') {
+      const p = normal(path, cwd), item = this.mustGet(p);
+      if (item.type === 'file') return [{ path: p, name: p.split('/').pop(), type: 'file' }];
+      const prefix = p === '/' ? '/' : p + '/';
+      return Object.entries(this.entries).filter(([q]) => q !== p && q.startsWith(prefix) && !q.slice(prefix.length).includes('/'))
+        .map(([q, e]) => ({ path: q, name: q.slice(prefix.length), type: e.type }))
+        .sort((a, b) => (a.type === b.type ? a.name.localeCompare(b.name) : a.type === 'dir' ? -1 : 1));
+    }
+    tree(path = '/', cwd = '/home/guest') {
+      const p = normal(path, cwd); this.mustGet(p);
+      return Object.keys(this.entries).filter(q => q === p || q.startsWith(p === '/' ? '/' : p + '/')).sort();
+    }
+    remove(path, cwd) {
+      const p = normal(path, cwd); assert(p !== '/', 'Cannot remove filesystem root');
+      this.mustGet(p);
+      const targets = Object.keys(this.entries).filter(q => q === p || q.startsWith(p + '/'));
+      assert(targets.length === 1, 'Directory is not empty: ' + p);
+      delete this.entries[p];
+    }
+    move(src, dst, cwd, keep = false) {
+      const a = normal(src, cwd), b = normal(dst, cwd);
+      assert(a !== '/' && b !== '/' && a !== b, 'Invalid move/copy target');
+      const entry = this.mustGet(a);
+      assert(!this.entries[b], 'Destination exists: ' + b);
+      this.mustParent(b);
+      assert(!(b + '/').startsWith(a + '/'), 'Cannot move directory into itself');
+      const descendants = this.tree(a);
+      assert(Object.keys(this.entries).length + (keep ? descendants.length : 0) <= ENTRY_LIMIT, 'Filesystem entry limit reached');
+      for (const p of descendants) {
+        const dest = b + p.slice(a.length);
+        assert(!this.entries[dest], 'Destination conflict: ' + dest);
+      }
+      if (keep) {
+        const extra = descendants.reduce((s, p) => s + (this.entries[p].type === 'file' ? utf8Size(this.entries[p].content) : 0), 0);
+        assert(this.usage() + extra <= FS_LIMIT, 'Virtual disk full');
+      }
+      const items = descendants.map(p => [b + p.slice(a.length), clone(this.entries[p])]);
+      if (!keep) for (const p of descendants) delete this.entries[p];
+      for (const [p, e] of items) this.entries[p] = e;
+      return { from: a, to: b, type: entry.type };
+    }
+    usage() { return Object.values(this.entries).reduce((s, e) => s + (e.type === 'file' ? utf8Size(e.content) : 0), 0); }
+    snapshot() { return { version: 1, entries: clone(this.entries) }; }
+    restore(payload) {
+      assert(payload && payload.version === 1 && payload.entries && typeof payload.entries === 'object' && !Array.isArray(payload.entries), 'Invalid filesystem backup');
+      const raw = payload.entries, keys = Object.keys(raw), clean = Object.create(null);
+      assert(keys.length > 0 && keys.length <= ENTRY_LIMIT && raw['/']?.type === 'dir', 'Invalid filesystem entries');
+      let total = 0;
+      for (const p of keys) {
+        assert(normal(p, '/') === p, 'Invalid canonical path: ' + p);
+        const value = raw[p];
+        assert(value && (value.type === 'dir' || value.type === 'file'), 'Invalid entry type');
+        assert(value.type === 'dir' ? value.content === undefined : typeof value.content === 'string', 'Invalid entry content');
+        if (value.type === 'file') { const size = utf8Size(value.content); assert(size <= FILE_LIMIT, 'File too large'); total += size; }
+        clean[p] = value.type === 'dir' ? { type: 'dir' } : { type: 'file', content: value.content };
+      }
+      assert(total <= FS_LIMIT, 'Backup exceeds virtual disk capacity');
+      for (const p of keys) if (p !== '/') assert(clean[parentOf(p)]?.type === 'dir', 'Missing parent directory: ' + p);
+      this.entries = Object.assign({}, clean);
+    }
+  }
+  function splitOperands(source) {
+    const pieces = [];
+    let part = '', quote = '', escaped = false, brackets = 0;
+    for (const c of source) {
+      if (quote) {
+        part += c;
+        if (escaped) escaped = false;
+        else if (c === '\\') escaped = true;
+        else if (c === quote) quote = '';
+      } else if (c === '"' || c === "'") { quote = c; part += c; }
+      else if (c === '[') { brackets++; part += c; }
+      else if (c === ']') { brackets--; assert(brackets >= 0, 'Invalid memory operand'); part += c; }
+      else if (c === ',' && brackets === 0) { pieces.push(part.trim()); part = ''; }
+      else part += c;
+    }
+    assert(!quote && brackets === 0, 'Unclosed quote or memory operand');
+    if (part.trim() || pieces.length) pieces.push(part.trim());
+    return pieces;
+  }
+  function uncomment(line) {
+    let quote = '', escaped = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (quote) {
+        if (escaped) escaped = false;
+        else if (c === '\\') escaped = true;
+        else if (c === quote) quote = '';
+      } else if (c === '"' || c === "'") quote = c;
+      else if (c === ';') return line.slice(0, i);
+    }
+    return line;
+  }
+  const INSTRUCTIONS = {
+    NOP: 0, HALT: 0, MOV: 2, ADD: 2, SUB: 2, MUL: 2, DIV: 2, MOD: 2,
+    AND: 2, OR: 2, XOR: 2, SHL: 2, SHR: 2, CMP: 2,
+    INC: 1, DEC: 1, JMP: 1, JZ: 1, JNZ: 1, JG: 1, JL: 1,
+    LOAD: 2, STORE: 2, PUSH: 1, POP: 1, PRINT: 1, PRINTC: 1
+  };
+  function parseText(t) {
+    if (t.startsWith('"')) { assert(t.endsWith('"'), 'Unclosed string'); try { return JSON.parse(t); } catch { throw new Error('Invalid quoted string'); } }
+    if (t.startsWith("'")) {
+      assert(t.endsWith("'"), 'Unclosed string');
+      return t.slice(1, -1).replace(/\\([\\'nrt])/g, (_, c) => ({ n: '\n', r: '\r', t: '\t', "'": "'", '\\': '\\' })[c]);
+    }
+    return null;
+  }
+  function compile(source) {
+    assert(typeof source === 'string' && utf8Size(source) <= FILE_LIMIT, 'Program source exceeds limit');
+    const lines = source.split(/\r?\n/);
+    assert(lines.length <= MAX_SOURCE_LINES, 'Program has too many lines');
+    const labels = Object.create(null), code = [];
+    for (let i = 0; i < lines.length; i++) {
+      let line = uncomment(lines[i]).trim();
+      if (!line) continue;
+      while (true) {
+        const match = line.match(/^([A-Za-z_][\w]*):\s*/);
+        if (!match) break;
+        const label = match[1].toLowerCase();
+        assert(labels[label] === undefined, 'Duplicate label ' + label + ' at line ' + (i + 1));
+        labels[label] = code.length;
+        line = line.slice(match[0].length).trim();
+        if (!line) break;
+      }
+      if (!line) continue;
+      const match = line.match(/^([A-Za-z]+)(?:\s+(.+))?$/);
+      assert(match, 'Invalid instruction on line ' + (i + 1));
+      const op = match[1].toUpperCase();
+      assert(Object.prototype.hasOwnProperty.call(INSTRUCTIONS, op), 'Unknown opcode ' + op + ' on line ' + (i + 1));
+      const args = match[2] ? splitOperands(match[2]) : [];
+      assert(args.length === INSTRUCTIONS[op] && args.every(Boolean), 'Wrong operand count for ' + op + ' on line ' + (i + 1));
+      code.push({ op, args, line: i + 1 });
+      assert(code.length <= MAX_INSTRUCTIONS, 'Program exceeds instruction limit');
+    }
+    assert(code.length > 0, 'Program is empty');
+    const jump = new Set(['JMP', 'JZ', 'JNZ', 'JG', 'JL']);
+    const reg = /^R[0-7]$/i;
+    const mem = /^\[(.+)\]$/;
+    const validVal = x => reg.test(x) || /^-?(?:0x[0-9a-f]+|\d+)$/i.test(x);
+    const requireValue = (x, line) => assert(validVal(x), 'Invalid numeric operand ' + x + ' at line ' + line);
+    for (const ins of code) {
+      const { op, args: a, line } = ins;
+      if (jump.has(op)) {
+        const target = a[0].toLowerCase();
+        assert(labels[target] !== undefined || /^\d+$/.test(target), 'Unknown jump target ' + a[0] + ' at line ' + line);
+        const dest = labels[target] !== undefined ? labels[target] : Number(target);
+        assert(dest >= 0 && dest < code.length, 'Jump target outside program at line ' + line);
+        ins.target = dest;
+      } else if (op === 'PRINT' || op === 'PRINTC') {
+        if (op === 'PRINT' && parseText(a[0]) !== null) ins.literal = parseText(a[0]);
+        else requireValue(a[0], line);
+      } else if (op === 'LOAD') {
+        assert(reg.test(a[0]) && mem.test(a[1]), 'LOAD requires register, [address] at line ' + line);
+        requireValue(a[1].match(mem)[1].trim(), line);
+      } else if (op === 'STORE') {
+        assert(mem.test(a[0]), 'STORE requires [address], value at line ' + line);
+        requireValue(a[0].match(mem)[1].trim(), line); requireValue(a[1], line);
+      } else if (['MOV','ADD','SUB','MUL','DIV','MOD','AND','OR','XOR','SHL','SHR'].includes(op)) {
+        assert(reg.test(a[0]), op + ' destination must be R0-R7 at line ' + line); requireValue(a[1], line);
+      } else if (op === 'CMP') { requireValue(a[0], line); requireValue(a[1], line); }
+      else if (['INC','DEC','POP'].includes(op)) assert(reg.test(a[0]), op + ' needs R0-R7 at line ' + line);
+      else if (op === 'PUSH') requireValue(a[0], line);
+    }
+    return { code, labels };
+  }
+  class VirtualCPU {
+    constructor(onOutput) {
+      this.onOutput = typeof onOutput === 'function' ? onOutput : () => {};
+      this.reset();
+    }
+    reset() {
+      this.ram = new Uint8Array(RAM_SIZE);
+      this.regs = new Uint16Array(8);
+      this.pc = 0; this.sp = 0xFFFE; this.z = false; this.g = false; this.l = false;
+      this.halted = true; this.cycles = 0; this.program = null; this.fault = null;
+    }
+    load(source) {
+      const assembled = compile(source);
+      this.reset(); this.program = assembled; this.halted = false;
+      return assembled.code.length;
+    }
+    value(x) {
+      const text = x.trim();
+      if (/^R[0-7]$/i.test(text)) return this.regs[Number(text[1])];
+      const n = /^-?0x/i.test(text) ? Number.parseInt(text, 16) : Number(text);
+      assert(Number.isInteger(n) && Number.isSafeInteger(n), 'Invalid numeric value: ' + text);
+      return n;
+    }
+    address(x) {
+      const m = x.trim().match(/^\[(.+)\]$/);
+      assert(m, 'Expected [address]: ' + x);
+      const at = this.value(m[1]);
+      assert(at >= 0 && at < RAM_SIZE - 1, '16-bit RAM access out of range: ' + at);
+      return at;
+    }
+    read16(at) { return this.ram[at] | (this.ram[at + 1] << 8); }
+    write16(at, v) { this.ram[at] = v & 255; this.ram[at + 1] = (v >>> 8) & 255; }
+    setReg(r, v) { const n = Number(r[1]); this.regs[n] = v & 0xffff; this.z = this.regs[n] === 0; }
+    step() {
+      if (!this.program) throw new Error('No program loaded');
+      if (this.halted) return { state: 'halted', cycles: this.cycles };
+      if (this.cycles >= CYCLE_LIMIT) {
+        this.halted = true; this.fault = 'Cycle limit reached (' + CYCLE_LIMIT + ')'; throw new Error(this.fault);
+      }
+      if (this.pc >= this.program.code.length) { this.halted = true; return { state: 'halted', cycles: this.cycles }; }
+      const ins = this.program.code[this.pc];
+      const { op, args: a } = ins;
+      this.pc++; this.cycles++;
+      try {
+        if (op === 'NOP') {}
+        else if (op === 'HALT') this.halted = true;
+        else if (op === 'MOV') this.setReg(a[0], this.value(a[1]));
+        else if (['ADD','SUB','MUL','DIV','MOD','AND','OR','XOR','SHL','SHR'].includes(op)) {
+          const x = this.value(a[0]), y = this.value(a[1]); let v;
+          if (op === 'ADD') v = x + y;
+          else if (op === 'SUB') v = x - y;
+          else if (op === 'MUL') v = x * y;
+          else if (op === 'DIV') { assert(y !== 0, 'Division by zero'); v = Math.trunc(x / y); }
+          else if (op === 'MOD') { assert(y !== 0, 'Modulo by zero'); v = x % y; }
+          else if (op === 'AND') v = x & y;
+          else if (op === 'OR') v = x | y;
+          else if (op === 'XOR') v = x ^ y;
+          else if (op === 'SHL') v = x << (y & 15);
+          else v = x >>> (y & 15);
+          this.setReg(a[0], v);
+        } else if (op === 'INC') this.setReg(a[0], this.value(a[0]) + 1);
+        else if (op === 'DEC') this.setReg(a[0], this.value(a[0]) - 1);
+        else if (op === 'CMP') {
+          const x = this.value(a[0]) & 0xffff, y = this.value(a[1]) & 0xffff;
+          this.z = x === y; this.g = x > y; this.l = x < y;
+        } else if (op === 'JMP' || (op === 'JZ' && this.z) || (op === 'JNZ' && !this.z) || (op === 'JG' && this.g) || (op === 'JL' && this.l)) this.pc = ins.target;
+        else if (op === 'LOAD') this.setReg(a[0], this.read16(this.address(a[1])));
+        else if (op === 'STORE') this.write16(this.address(a[0]), this.value(a[1]));
+        else if (op === 'PUSH') {
+          assert(this.sp >= 0xC002, 'Stack overflow');
+          this.sp -= 2; this.write16(this.sp, this.value(a[0]));
+        } else if (op === 'POP') {
+          assert(this.sp < 0xFFFE, 'Stack underflow');
+          this.setReg(a[0], this.read16(this.sp)); this.sp += 2;
+        } else if (op === 'PRINT') this.onOutput(ins.literal !== undefined ? ins.literal : String(this.value(a[0])));
+        else if (op === 'PRINTC') this.onOutput(String.fromCharCode(this.value(a[0]) & 255));
+      } catch (err) {
+        this.halted = true; this.fault = 'Line ' + ins.line + ': ' + err.message;
+        throw new Error(this.fault);
+      }
+      if (this.pc >= this.program.code.length) this.halted = true;
+      return { state: this.halted ? 'halted' : 'ready', cycles: this.cycles, line: ins.line, pc: this.pc };
+    }
+    run(maxSteps = CYCLE_LIMIT) {
+      assert(Number.isInteger(maxSteps) && maxSteps > 0, 'maxSteps must be positive integer');
+      let count = 0;
+      while (!this.halted && count < maxSteps) { this.step(); count++; }
+      return { steps: count, halted: this.halted, cycles: this.cycles };
+    }
+    ramView(start = 0, length = 64) {
+      assert(Number.isInteger(start) && start >= 0 && start < RAM_SIZE, 'Invalid memory offset');
+      assert(Number.isInteger(length) && length >= 1 && length <= 256, 'Memory view must be 1-256 bytes');
+      return Array.from(this.ram.slice(start, Math.min(start + length, RAM_SIZE)));
+    }
+    state() {
+      return { regs: Array.from(this.regs), pc: this.pc, sp: this.sp, z: this.z, g: this.g, l: this.l,
+        cycles: this.cycles, halted: this.halted, fault: this.fault, instructions: this.program?.code.length ?? 0 };
+    }
+  }
+  function shellWords(raw) {
+    const result = []; let cur = '', quoted = '', escaped = false, started = false;
+    for (const ch of raw) {
+      if (escaped) { cur += ch === 'n' ? '\n' : ch === 't' ? '\t' : ch; escaped = false; started = true; }
+      else if (ch === '\\') escaped = true;
+      else if (quoted) { if (ch === quoted) quoted = ''; else cur += ch; }
+      else if (ch === '"' || ch === "'") { quoted = ch; started = true; }
+      else if (/\s/.test(ch)) { if (started) { result.push(cur); cur = ''; started = false; } }
+      else { cur += ch; started = true; }
+    }
+    assert(!quoted && !escaped, 'Unclosed quote or escape');
+    if (started) result.push(cur);
+    return result;
+  }
+  return { VirtualFS, VirtualCPU, compile, normal, shellWords,
+    constants: { FS_LIMIT, FILE_LIMIT, ENTRY_LIMIT, RAM_SIZE, CYCLE_LIMIT } };
+});
+
+</script>
+<script>
+/* Browser user interface for the offline internal computer. */
+(function () {
+  'use strict';
+  const Core = globalThis.VComputerCore;
+  const STORAGE = 'internal-computer-v1-filesystem';
+  const $ = id => document.getElementById(id);
+  const fs = new Core.VirtualFS();
+  const cpu = new Core.VirtualCPU(text => terminalLine(String(text), 'program'));
+  let cwd = '/home/guest';
+  let activePath = '/programs/fibonacci.asm';
+  let loadedPath = '';
+  let loadedSource = '';
+  let editorDirty = false;
+  let running = false;
+  let frame = null;
+  let commandHistory = [];
+  let historyIndex = -1;
+  let terminalCount = 0;
+  let terminalMax = 1200;
+  let clockStart = Date.now();
+  let memoryStart = 0;
+
+  function terminalLine(message, kind = 'normal') {
+    const content = $('terminal-output');
+    for (const raw of String(message).split('\n')) {
+      if (terminalCount >= terminalMax) { content.removeChild(content.firstChild); terminalCount--; }
+      const el = document.createElement('div');
+      el.className = 'term-line ' + kind;
+      el.textContent = raw || '\u00a0';
+      content.appendChild(el); terminalCount++;
+    }
+    content.scrollTop = content.scrollHeight;
+  }
+  function status(message, problem = false) {
+    $('status-note').textContent = message;
+    $('status-note').classList.toggle('warning', problem);
+  }
+  function persist() {
+    try { localStorage.setItem(STORAGE, JSON.stringify(fs.snapshot())); $('save-state').textContent = 'LOCAL DISK SAVED'; }
+    catch (err) { $('save-state').textContent = 'DISK NOT SAVED'; terminalLine('Warning: browser storage unavailable or full. Export your disk to preserve changes.', 'error'); }
+    renderDisk();
+  }
+  function restoreLocal() {
+    try {
+      const saved = localStorage.getItem(STORAGE);
+      if (saved) { fs.restore(JSON.parse(saved)); return true; }
+    } catch (err) { terminalLine('Could not read saved disk; loaded factory filesystem: ' + err.message, 'error'); }
+    return false;
+  }
+  function pathName(p) { return p === '/' ? '/' : p.split('/').pop(); }
+  function openFile(path, force = false) {
+    if (!force && editorDirty && !window.confirm('Discard unsaved changes in the editor?')) return;
+    const p = fs.path(path, cwd);
+    const value = fs.read(p);
+    activePath = p;
+    $('editor-path').value = p;
+    $('editor').value = value;
+    editorDirty = false;
+    $('editor-indicator').textContent = 'SAVED';
+    renderExplorer();
+    status('Editing ' + p);
+  }
+  function saveEditor() {
+    try {
+      const p = fs.path($('editor-path').value.trim(), cwd);
+      fs.write(p, $('editor').value);
+      activePath = p; editorDirty = false;
+      $('editor-indicator').textContent = 'SAVED';
+      persist(); renderExplorer();
+      status('Saved ' + p);
+      terminalLine('Saved ' + p, 'success');
+    } catch (err) { status(err.message, true); terminalLine('Save failed: ' + err.message, 'error'); }
+  }
+  function renderExplorer() {
+    const root = $('file-list'); root.replaceChildren();
+    const entries = fs.tree('/').filter(p => p !== '/');
+    for (const p of entries) {
+      const entry = fs.get(p);
+      const row = document.createElement('button');
+      const depth = p.split('/').length - 2;
+      row.className = 'file-entry' + (p === activePath ? ' active' : '');
+      row.style.paddingLeft = (12 + Math.min(depth, 10) * 13) + 'px';
+      row.title = p;
+      const ico = document.createElement('span');
+      ico.className = 'file-icon'; ico.textContent = entry.type === 'dir' ? '▸' : '⌁';
+      const name = document.createElement('span');
+      name.className = 'file-name'; name.textContent = pathName(p);
+      row.append(ico, name);
+      row.addEventListener('click', () => {
+        if (entry.type === 'file') { try { openFile(p); } catch (e) { terminalLine(e.message, 'error'); } }
+        else { cwd = p; terminalLine('Current directory: ' + cwd, 'muted'); updatePrompt(); }
+      });
+      root.append(row);
+    }
+  }
+  function renderDisk() {
+    const used = fs.usage();
+    $('disk-used').textContent = (used / 1024).toFixed(1) + ' / 1024 KiB';
+    $('disk-bar').style.width = Math.min(100, (used / Core.constants.FS_LIMIT) * 100) + '%';
+    $('disk-count').textContent = Object.keys(fs.entries).length + ' filesystem entries';
+  }
+  function renderCPU() {
+    const s = cpu.state();
+    for (let i = 0; i < 8; i++) {
+      $("r" + i).textContent = s.regs[i].toString(16).padStart(4, '0').toUpperCase();
+      $("rv" + i).textContent = s.regs[i].toString(10);
+    }
+    $('pc').textContent = String(s.pc).padStart(4, '0');
+    $('sp').textContent = s.sp.toString(16).padStart(4, '0').toUpperCase();
+    $('cycles').textContent = s.cycles.toLocaleString();
+    $('flags').textContent = 'Z ' + Number(s.z) + '   G ' + Number(s.g) + '   L ' + Number(s.l);
+    $('run-state').textContent = running ? 'RUNNING' : s.fault ? 'FAULT' : !cpu.program ? 'OFFLINE' : s.halted ? 'HALTED' : 'READY';
+    $('run-state').dataset.state = running ? 'running' : s.fault ? 'fault' : s.halted ? 'halted' : 'ready';
+    $('loaded-label').textContent = loadedPath ? pathName(loadedPath) : 'NONE';
+    $('machine-instructions').textContent = s.instructions + ' INSTRUCTIONS';
+    renderMemory();
+  }
+  function renderMemory() {
+    const lines = [], end = Math.min(65536, memoryStart + 128);
+    for (let at = memoryStart; at < end; at += 16) {
+      const arr = cpu.ramView(at, Math.min(16, end - at));
+      const hex = arr.map(v => v.toString(16).padStart(2, '0').toUpperCase()).join(' ');
+      const ascii = arr.map(v => (v >= 32 && v <= 126) ? String.fromCharCode(v) : '.').join('');
+      lines.push(at.toString(16).padStart(4, '0').toUpperCase() + '  ' + hex.padEnd(47) + '  ' + ascii);
+    }
+    $('memory-view').textContent = lines.join('\n');
+    $('memory-offset').value = '0x' + memoryStart.toString(16).padStart(4, '0').toUpperCase();
+  }
+  function setMemoryOffset(raw) {
+    const n = /^0x/i.test(raw) ? parseInt(raw, 16) : Number(raw);
+    if (!Number.isInteger(n) || n < 0 || n > 65535) throw new Error('Memory offset must be 0..65535');
+    memoryStart = Math.min(65535, Math.floor(n / 16) * 16);
+    renderMemory();
+  }
+  function pause() {
+    running = false;
+    if (frame !== null) { cancelAnimationFrame(frame); frame = null; }
+    renderCPU();
+  }
+  function bootSource(source, name) {
+    pause();
+    const count = cpu.load(source);
+    loadedSource = source; loadedPath = name;
+    terminalLine('CPU loaded ' + count + ' instructions from ' + name, 'success');
+    status('Program ready: ' + name);
+    renderCPU();
+  }
+  function sourceFromEditor() {
+    const src = $('editor').value;
+    const name = fs.path($('editor-path').value || activePath, cwd) + (editorDirty ? ' [unsaved buffer]' : '');
+    return { src, name };
+  }
+  function runProgram(fromEditor = false, path = '') {
+    try {
+      if (path) { const p = fs.path(path, cwd); bootSource(fs.read(p), p); }
+      else if (fromEditor || !cpu.program || cpu.halted) {
+        const { src, name } = sourceFromEditor(); bootSource(src, name);
+      }
+      if (running) return;
+      running = true; renderCPU(); status('Executing on the local virtual CPU');
+      let lastRender = 0;
+      const tick = ts => {
+        if (!running) return;
+        try {
+          for (let i = 0; i < 300 && !cpu.halted; i++) cpu.step();
+          if (ts - lastRender > 80 || cpu.halted) { renderCPU(); lastRender = ts; }
+          if (cpu.halted) {
+            running = false; frame = null; renderCPU();
+            terminalLine('Process exited normally (' + cpu.cycles.toLocaleString() + ' cycles).', 'success');
+            status('Execution complete');
+          } else frame = requestAnimationFrame(tick);
+        } catch (err) {
+          pause(); terminalLine('Runtime error: ' + err.message, 'error'); status(err.message, true);
+        }
+      };
+      frame = requestAnimationFrame(tick);
+    } catch (err) { pause(); terminalLine('Error: ' + err.message, 'error'); status(err.message, true); }
+  }
+  function stepProgram() {
+    pause();
+    try {
+      if (!cpu.program || cpu.halted) { const { src, name } = sourceFromEditor(); bootSource(src, name); }
+      const result = cpu.step(); renderCPU();
+      status('Executed line ' + result.line + ', program counter ' + result.pc);
+      if (cpu.halted) terminalLine('Process halted after ' + cpu.cycles + ' cycles.', 'success');
+    } catch (err) { pause(); terminalLine('Step error: ' + err.message, 'error'); status(err.message, true); }
+  }
+  function makeDownload(name, content, type) {
+    const data = new Blob([content], { type });
+    const url = URL.createObjectURL(data);
+    const a = document.createElement('a'); a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+  }
+  function exportDisk() {
+    const pack = { format: 'INTERNAL_COMPUTER_BACKUP', version: 1, timestamp: new Date().toISOString(), filesystem: fs.snapshot() };
+    makeDownload('internal-computer-backup.json', JSON.stringify(pack, null, 2), 'application/json');
+    terminalLine('Downloaded filesystem backup JSON.', 'success');
+  }
+  async function importDisk(file) {
+    if (!file) return;
+    try {
+      if (file.size > 1.6 * 1024 * 1024) throw new Error('Import is too large');
+      const raw = await file.text();
+      const pack = JSON.parse(raw);
+      if (pack.format !== 'INTERNAL_COMPUTER_BACKUP' || pack.version !== 1) throw new Error('Unsupported backup format');
+      const candidate = new Core.VirtualFS(false);
+      candidate.restore(pack.filesystem);
+      if (!window.confirm('Replace the current virtual disk with the imported backup?')) return;
+      pause(); fs.restore(candidate.snapshot()); persist();
+      cwd = fs.get('/home/guest')?.type === 'dir' ? '/home/guest' : '/';
+      const first = fs.tree('/').find(p => fs.get(p)?.type === 'file');
+      activePath = first || '/home/guest/new.asm';
+      $('editor-path').value = activePath;
+      $('editor').value = first ? fs.read(first) : '';
+      editorDirty = false; $('editor-indicator').textContent = 'SAVED';
+      cpu.reset(); loadedPath = ''; loadedSource = '';
+      renderExplorer(); renderCPU(); updatePrompt();
+      terminalLine('Virtual disk successfully restored from backup.', 'success'); status('Backup imported');
+    } catch (err) { terminalLine('Import rejected: ' + err.message, 'error'); status(err.message, true); }
+    finally { $('import-file').value = ''; }
+  }
+  function updatePrompt() { $('prompt-prefix').textContent = 'guest@internal:' + cwd + '$'; }
+  function shell(raw) {
+    terminalLine('guest@internal:' + cwd + '$ ' + raw, 'command');
+    let words;
+    try { words = Core.shellWords(raw); } catch (err) { terminalLine(err.message, 'error'); return; }
+    if (!words.length) return;
+    const [cmdRaw, ...args] = words;
+    const cmd = cmdRaw.toLowerCase();
+    const out = text => terminalLine(text, 'normal');
+    const requireArgs = n => { if (args.length < n) throw new Error(cmd + ' requires ' + n + ' argument(s)'); };
+    try {
+      if (cmd === 'help') out('COMMANDS\n  help                  Command reference\n  ls [path]             List virtual directory\n  tree [path]           Recursive virtual filesystem paths\n  cd [path]             Change virtual directory\n  pwd                   Current virtual directory\n  cat <file>            Print a virtual text file\n  write <file> <text>   Write virtual text file\n  touch <file>          Create empty virtual text file\n  mkdir <dir>           Create directory\n  rm <path>             Remove file or empty directory\n  cp <source> <dest>    Copy a virtual file or directory\n  mv <source> <dest>    Move a virtual file or directory\n  edit <file>           Open virtual text file in editor\n  save                  Save current editor buffer\n  load <file>           Assemble source into virtual CPU\n  run [file]            Run loaded program or a .asm file\n  step                  Execute one instruction\n  pause                 Pause running program\n  reset                 Reset CPU (keep virtual files)\n  regs                  Show register values\n  mem [offset] [n]      Read 1..256 virtual RAM bytes\n  disk                  Show virtual storage usage\n  ps                    Show virtual program state\n  echo <text>           Print text\n  date                  Display current device date\n  examples              Show bundled assembly examples\n  export                Download virtual disk JSON\n  import                Choose JSON backup to restore\n  history               Show command history\n  clear                 Clear terminal\n\nCPU OPS: MOV ADD SUB MUL DIV MOD AND OR XOR SHL SHR INC DEC CMP\n         JMP JZ JNZ JG JL LOAD STORE PUSH POP PRINT PRINTC HALT NOP\nCPU: 8 x 16-bit registers, 64 KiB RAM, 100,000-cycle safety limit.');
+      else if (cmd === 'pwd') out(cwd);
+      else if (cmd === 'cd') { const p = fs.path(args[0] || '/home/guest', cwd); if (fs.mustGet(p).type !== 'dir') throw new Error('Not a directory'); cwd = p; updatePrompt(); }
+      else if (cmd === 'ls') { const listing = fs.list(args[0] || '.', cwd); out(listing.length ? listing.map(e => (e.type === 'dir' ? '[DIR] ' : '      ') + e.name).join('\n') : '(empty)'); }
+      else if (cmd === 'tree') out(fs.tree(args[0] || '/', cwd).join('\n'));
+      else if (cmd === 'cat') { requireArgs(1); out(fs.read(args[0], cwd)); }
+      else if (cmd === 'mkdir') { requireArgs(1); const p = fs.mkdir(args[0], cwd); persist(); renderExplorer(); out('Created ' + p); }
+      else if (cmd === 'touch') { requireArgs(1); const p = fs.path(args[0], cwd); fs.write(p, fs.get(p)?.type === 'file' ? fs.read(p) : ''); persist(); renderExplorer(); out('Touched ' + p); }
+      else if (cmd === 'write') { requireArgs(2); const p = fs.write(args[0], args.slice(1).join(' '), cwd); persist(); renderExplorer(); out('Wrote ' + p); }
+      else if (cmd === 'rm') { requireArgs(1); fs.remove(args[0], cwd); persist(); renderExplorer(); out('Removed ' + args[0]); }
+      else if (cmd === 'mv' || cmd === 'cp') { requireArgs(2); const result = fs.move(args[0], args[1], cwd, cmd === 'cp'); persist(); renderExplorer(); out((cmd === 'cp' ? 'Copied ' : 'Moved ') + result.from + ' to ' + result.to); }
+      else if (cmd === 'edit') { requireArgs(1); openFile(args[0]); out('Opened ' + fs.path(args[0], cwd)); }
+      else if (cmd === 'save') saveEditor();
+      else if (cmd === 'load') { requireArgs(1); const p = fs.path(args[0], cwd); bootSource(fs.read(p), p); }
+      else if (cmd === 'run') { if (args.length) runProgram(false, args[0]); else if (cpu.program && !cpu.halted) runProgram(); else runProgram(true); }
+      else if (cmd === 'step') stepProgram();
+      else if (cmd === 'pause') { pause(); out('Virtual CPU paused.'); }
+      else if (cmd === 'reset') { pause(); cpu.reset(); loadedPath = ''; loadedSource = ''; renderCPU(); out('CPU reset. Virtual disk preserved.'); }
+      else if (cmd === 'regs') { const s = cpu.state(); out(s.regs.map((v, i) => 'R' + i + '=0x' + v.toString(16).padStart(4, '0') + ' (' + v + ')').join('\n') + '\nPC=' + s.pc + ' SP=0x' + s.sp.toString(16) + ' cycles=' + s.cycles + ' Z=' + Number(s.z) + ' G=' + Number(s.g) + ' L=' + Number(s.l)); }
+      else if (cmd === 'mem') {
+        const start = args[0] ? /^0x/i.test(args[0]) ? parseInt(args[0], 16) : Number(args[0]) : 0;
+        const n = args[1] ? Number(args[1]) : 64;
+        out(cpu.ramView(start, n).map(v => v.toString(16).padStart(2, '0')).join(' '));
+        setMemoryOffset(String(start));
+      }
+      else if (cmd === 'disk') out('Virtual disk: ' + fs.usage() + '/' + Core.constants.FS_LIMIT + ' bytes; ' + Object.keys(fs.entries).length + ' entries');
+      else if (cmd === 'ps') out(JSON.stringify({ program: loadedPath || '(none)', running, ...cpu.state() }, null, 2));
+      else if (cmd === 'echo') out(args.join(' '));
+      else if (cmd === 'date') out(new Date().toString());
+      else if (cmd === 'examples') out(fs.tree('/programs').filter(p => p.endsWith('.asm')).join('\n'));
+      else if (cmd === 'history') out(commandHistory.map((v, i) => String(i + 1).padStart(3, ' ') + ' ' + v).join('\n'));
+      else if (cmd === 'export') exportDisk();
+      else if (cmd === 'import') $('import-file').click();
+      else if (cmd === 'clear') { $('terminal-output').replaceChildren(); terminalCount = 0; }
+      else throw new Error('Unknown command: ' + cmd + '. Type help.');
+    } catch (err) { terminalLine('Error: ' + err.message, 'error'); status(err.message, true); }
+    finally { renderDisk(); }
+  }
+  function init() {
+    const recovered = restoreLocal();
+    renderExplorer(); renderDisk(); renderCPU(); updatePrompt();
+    $('editor').addEventListener('input', () => { editorDirty = true; $('editor-indicator').textContent = 'UNSAVED'; });
+    $('editor').addEventListener('keydown', ev => {
+      if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 's') { ev.preventDefault(); saveEditor(); }
+      if (ev.key === 'Tab') {
+        ev.preventDefault(); const t = ev.target, s = t.selectionStart, e = t.selectionEnd;
+        t.setRangeText('  ', s, e, 'end'); editorDirty = true; $('editor-indicator').textContent = 'UNSAVED';
+      }
+    });
+    $('terminal-input').addEventListener('keydown', ev => {
+      if (ev.key === 'Enter') {
+        ev.preventDefault(); const value = ev.target.value.trim(); ev.target.value = '';
+        if (value) { commandHistory.push(value); if (commandHistory.length > 200) commandHistory.shift(); historyIndex = commandHistory.length; shell(value); }
+      } else if (ev.key === 'ArrowUp') { ev.preventDefault(); if (historyIndex > 0) $('terminal-input').value = commandHistory[--historyIndex]; }
+      else if (ev.key === 'ArrowDown') { ev.preventDefault(); if (historyIndex < commandHistory.length - 1) $('terminal-input').value = commandHistory[++historyIndex]; else { historyIndex = commandHistory.length; $('terminal-input').value = ''; } }
+    });
+    $('btn-run').addEventListener('click', () => runProgram(true));
+    $('btn-step').addEventListener('click', stepProgram);
+    $('btn-pause').addEventListener('click', () => { pause(); status('Paused'); });
+    $('btn-reset').addEventListener('click', () => { pause(); cpu.reset(); loadedPath = ''; loadedSource = ''; renderCPU(); status('CPU reset; virtual disk unchanged'); });
+    $('btn-save').addEventListener('click', saveEditor);
+    $('btn-export').addEventListener('click', exportDisk);
+    $('btn-import').addEventListener('click', () => $('import-file').click());
+    $('import-file').addEventListener('change', ev => importDisk(ev.target.files?.[0]));
+    $('btn-memory').addEventListener('click', () => { try { setMemoryOffset($('memory-offset').value.trim()); } catch (err) { status(err.message, true); } });
+    $('btn-terminal-clear').addEventListener('click', () => shell('clear'));
+    $('btn-new').addEventListener('click', () => {
+      if (editorDirty && !window.confirm('Discard unsaved editor changes?')) return;
+      let candidate = '/home/guest/untitled.asm'; let index = 1;
+      while (fs.get(candidate)) candidate = '/home/guest/untitled-' + (index++) + '.asm';
+      activePath = candidate; $('editor-path').value = candidate;
+      $('editor').value = '; New program\nPRINT "Hello, world"\nHALT\n';
+      editorDirty = true; $('editor-indicator').textContent = 'UNSAVED'; renderExplorer(); status('New unsaved program');
+    });
+    $('btn-open-fib').addEventListener('click', () => { try { openFile('/programs/fibonacci.asm'); } catch (err) { status(err.message, true); } });
+    $('btn-open-mem').addEventListener('click', () => { try { openFile('/programs/memory.asm'); } catch (err) { status(err.message, true); } });
+    $('btn-open-hello').addEventListener('click', () => { try { openFile('/programs/hello.asm'); } catch (err) { status(err.message, true); } });
+    $('btn-focus-terminal').addEventListener('click', () => { $('terminal-input').focus(); });
+    try { openFile(fs.get(activePath)?.type === 'file' ? activePath : fs.tree('/').find(p => fs.get(p)?.type === 'file') || '/docs/README.txt', true); }
+    catch (err) { status('No default program exists; use New File.', true); }
+    terminalLine('INTERNAL COMPUTER v1.0  |  OFFLINE / SANDBOXED / 16-BIT', 'success');
+    terminalLine(recovered ? 'Restored local virtual filesystem.' : 'Created factory virtual filesystem.', 'muted');
+    terminalLine('Type help for commands. Open a program and select RUN to execute.', 'normal');
+    status('Virtual computer initialized • no external network or host shell');
+    $('terminal-input').focus();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+
+</script>
+</body>
+</html>
