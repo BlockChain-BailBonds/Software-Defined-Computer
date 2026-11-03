@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+lab-data/
+derived-linux-esp32s3/
+build-output/
+*.bin
+*.key
+*.pem

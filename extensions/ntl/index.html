@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="theme-color" content="#0a1320">
+<title>Internal Computer + NTL • Offline Difference Lab</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="mark" aria-hidden="true">⌘</div><div><h1>INTERNAL COMPUTER <span style="color:#6ee0c7">/</span> 01</h1><p>VIRTUAL WORKSTATION · 16 BIT · LOCAL SANDBOX</p></div></div>
+    <div class="topactions" role="toolbar" aria-label="Virtual computer controls">
+      <button class="btn" id="btn-ntl-mode" aria-controls="ntl-panel" aria-pressed="false">◈ NTL DIFF</button>
+      <button class="btn primary" id="btn-run">▶ RUN</button>
+      <button class="btn" id="btn-step">↳ STEP</button>
+      <button class="btn" id="btn-pause">Ⅱ PAUSE</button>
+      <button class="btn warn" id="btn-reset">⟳ RESET CPU</button>
+      <button class="btn" id="btn-export">⇩ BACKUP</button>
+      <button class="btn" id="btn-import">⇧ RESTORE</button>
+    </div>
+  </header>
+  <div class="workspace">
+    <aside class="left" aria-label="Virtual file explorer">
+      <section class="left-section">
+        <p class="section-label">VIRTUAL FILESYSTEM</p>
+        <div class="nav-title">/ root</div>
+        <p class="muted" style="font-size:11px;margin:9px 0 0">Sandboxed, browser-local storage. No host device access.</p>
+        <div class="file-actions"><button id="btn-new" class="btn small">+ NEW FILE</button><button id="btn-save" class="btn small">SAVE FILE</button></div>
+      </section>
+      <div class="file-scroller" id="file-list" aria-label="Files and directories"></div>
+      <section class="left-section">
+        <p class="section-label">SAMPLE PROGRAMS</p>
+        <div class="file-actions"><button class="btn small" id="btn-open-fib">FIBONACCI</button><button class="btn small" id="btn-open-mem">MEMORY</button><button class="btn small" id="btn-open-hello">HELLO</button></div>
+      </section>
+      <section class="left-section"><p class="section-label">VIRTUAL DISK</p><div class="disknumbers"><span>USAGE</span><span id="disk-used">0 / 1024 KiB</span></div><div class="diskbar"><div class="diskfill" id="disk-bar"></div></div><div id="disk-count">0 entries</div><div id="save-state" class="muted" style="font:10px var(--font);margin-top:12px">LOCAL DISK</div></section>
+    </aside>
+    <main class="center" id="center-main">
+      <section class="editor-panel" id="vm-editor" aria-label="Assembly source editor">
+        <div class="panelhead"><strong>◈ ASSEMBLY EDITOR</strong><div class="panel-actions"><span class="smalltag" id="editor-indicator">SAVED</span><span class="kbd">Ctrl+S</span></div></div>
+        <div class="pathbar"><span>FILE</span><input id="editor-path" type="text" spellcheck="false" aria-label="Current virtual file path" value="/programs/fibonacci.asm"><span>.ASM</span></div>
+        <textarea id="editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Assembly source code"></textarea>
+      </section>
+      <section class="terminal-panel" id="vm-terminal" aria-label="Virtual terminal">
+        <div class="panelhead terminal-head"><strong>&gt;_ VIRTUAL TERMINAL</strong><button id="btn-terminal-clear" class="btn small">CLEAR</button></div>
+        <div class="terminal" id="terminal-output" role="log" aria-live="polite" aria-relevant="additions text"></div>
+        <div class="commandbar"><span id="prompt-prefix">guest@internal:~$</span><input type="text" id="terminal-input" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Virtual shell command" placeholder="help" maxlength="1000"><button class="btn small" id="btn-focus-terminal">⌁</button></div>
+      </section>
+      <section class="ntl-panel" id="ntl-panel" aria-label="Name That LLM Difference Lab" hidden>
+        <div class="panelhead"><strong>◈ NAME THAT LLM · DIFFERENCE LAB</strong><span class="smalltag">OFFLINE · NO ATTRIBUTION CLAIM</span></div>
+        <div class="ntl-body">
+          <p class="ntl-explain">Compare outputs from the <strong>same prompt</strong>. The analysis measures measurable text, structure, and lexical differences; it cannot prove which model produced them. The supplied text stays on this device.</p>
+          <label class="ntl-label" for="ntl-prompt">MATCHED TEST PROMPT</label>
+          <textarea id="ntl-prompt" class="ntl-textarea ntl-prompt" maxlength="8192" placeholder="Paste the exact prompt used for both models"></textarea>
+          <div class="ntl-columns">
+            <div class="ntl-response"><label class="ntl-label" for="ntl-a-name">RESPONSE A LABEL</label><input id="ntl-a-name" class="ntl-input" maxlength="100" value="Candidate A"><textarea id="ntl-a" class="ntl-textarea ntl-input-response" maxlength="32768" placeholder="Paste the first model's response"></textarea></div>
+            <div class="ntl-response"><label class="ntl-label" for="ntl-b-name">RESPONSE B LABEL</label><input id="ntl-b-name" class="ntl-input" maxlength="100" value="Candidate B"><textarea id="ntl-b" class="ntl-textarea ntl-input-response" maxlength="32768" placeholder="Paste the second model's response"></textarea></div>
+          </div>
+          <div class="ntl-actions"><button id="btn-ntl-compare" class="btn primary">COMPARE RESPONSES</button><button id="btn-ntl-demo" class="btn">LOAD EXAMPLE</button><button id="btn-ntl-save" class="btn">SAVE TO VIRTUAL DISK</button><button id="btn-ntl-export" class="btn">EXPORT REPORT JSON</button></div>
+          <p id="ntl-status" class="ntl-status" role="status">No comparison run.</p>
+          <pre id="ntl-result" class="ntl-report" aria-label="Difference analysis result">Run a comparison to see metrics and exact line differences.</pre>
+          <details class="ntl-batch"><summary>BATCH EXPERIMENTS · Up to 32 matched prompts</summary>
+            <p class="ntl-explain">Paste a JSON object with <code>format: "NTL_DIFF_BATCH"</code>, <code>version: 1</code>, and a <code>cases</code> array. Each case accepts <code>prompt</code>, <code>labelA</code>, <code>labelB</code>, <code>responseA</code>, and <code>responseB</code>.</p>
+            <textarea id="ntl-batch-json" class="ntl-textarea ntl-json" aria-label="Batch comparison JSON" placeholder="Paste NTL_DIFF_BATCH JSON here"></textarea>
+            <div class="ntl-actions"><button id="btn-ntl-batch" class="btn primary">ANALYZE BATCH</button><button id="btn-ntl-import" class="btn">IMPORT LOCAL JSON</button><button id="btn-ntl-demo-batch" class="btn">EXAMPLE BATCH</button></div>
+          </details>
+        </div>
+      </section>
+    </main>
+    <aside class="right" aria-label="CPU and memory inspector">
+      <section class="inspector-section"><p class="section-label">PROCESSOR STATE</p><div class="stats-row"><span class="state" id="run-state">OFFLINE</span><span class="inspector-label" id="machine-instructions">0 INSTRUCTIONS</span></div><div class="kv"><span class="inspector-label">LOADED</span><span class="inspector-value" id="loaded-label">NONE</span></div><div class="kv"><span class="inspector-label">PC</span><span class="inspector-value" id="pc">0000</span></div><div class="kv"><span class="inspector-label">SP</span><span class="inspector-value" id="sp">FFFE</span></div><div class="kv"><span class="inspector-label">CYCLES</span><span class="inspector-value" id="cycles">0</span></div><div class="kv"><span class="inspector-label">FLAGS</span><span class="inspector-value" id="flags">Z 0 G 0 L 0</span></div></section>
+      <section class="inspector-section"><p class="section-label">16-BIT REGISTERS</p><div class="register-grid">
+        <div class="reg"><div class="regtop"><b>R0</b><code id="r0">0000</code></div><span id="rv0">0</span></div>
+        <div class="reg"><div class="regtop"><b>R1</b><code id="r1">0000</code></div><span id="rv1">0</span></div>
+        <div class="reg"><div class="regtop"><b>R2</b><code id="r2">0000</code></div><span id="rv2">0</span></div>
+        <div class="reg"><div class="regtop"><b>R3</b><code id="r3">0000</code></div><span id="rv3">0</span></div>
+        <div class="reg"><div class="regtop"><b>R4</b><code id="r4">0000</code></div><span id="rv4">0</span></div>
+        <div class="reg"><div class="regtop"><b>R5</b><code id="r5">0000</code></div><span id="rv5">0</span></div>
+        <div class="reg"><div class="regtop"><b>R6</b><code id="r6">0000</code></div><span id="rv6">0</span></div>
+        <div class="reg"><div class="regtop"><b>R7</b><code id="r7">0000</code></div><span id="rv7">0</span></div>
+      </div></section>
+      <section class="inspector-section"><p class="section-label">RAM MONITOR · 64 KiB</p><div class="memory-controls"><input type="text" id="memory-offset" value="0x0000" aria-label="RAM offset"><button class="btn small" id="btn-memory">GO</button></div><pre id="memory-view">0000</pre></section>
+      <section class="inspector-section"><p class="section-label">ISOLATION BOUNDARY</p><p class="muted" style="font-size:11px;line-height:1.65">Programs run inside a restricted instruction interpreter. They cannot run host shell commands, fetch network content, or inspect real device files.</p></section>
+    </aside>
+  </div>
+  <footer class="bottom"><span id="status-note"><span class="dot"></span> Initializing virtual computer</span><span>100,000 CYCLE LIMIT · 1 MiB VIRTUAL DISK · NO EXTERNAL DEPENDENCIES</span></footer>
+</div>
+<input id="import-file" type="file" accept=".json,application/json" hidden>
+<input id="ntl-import-file" type="file" accept=".json,application/json" hidden>
+<script src="core.js"></script><script src="ntl_diff.js"></script><script src="app.js"></script>
+</body>
+</html>

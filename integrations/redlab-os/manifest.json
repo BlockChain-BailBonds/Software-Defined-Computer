@@ -1,0 +1,26 @@
+{
+  "name": "Evil Inspector Gadget RedLab OS",
+  "version": "0.1.0",
+  "brand": "918 Technologies",
+  "target": "ESP32-S3 N16R8: 16 MiB flash / 8 MiB PSRAM",
+  "esp_base": {
+    "repository": "https://github.com/paulneja/Linux-on-esp32-S3",
+    "commit": "979acc45629e985b757735e8222dbedf3aa5f1e1",
+    "kind": "experimental native Xtensa NOMMU Linux, Buildroot; NOT Canonical Ubuntu"
+  },
+  "phone_base": "Termux Python 3, optionally Ubuntu via PRoot, optionally local llama-server",
+  "policies": {
+    "flash_by_default": false,
+    "board_network_mode": "WiFi station only",
+    "on_device_network_scanning": false,
+    "scope_approval_required": true,
+    "host_server_bind": "127.0.0.1"
+  },
+  "status": {
+    "source_packaged": true,
+    "unit_tests": "run tests to verify",
+    "docker_image_built": false,
+    "esp_firmware_flushed": false,
+    "hardware_accepted": false
+  }
+}

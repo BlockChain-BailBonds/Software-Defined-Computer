@@ -1,0 +1,190 @@
+TAP version 13
+# Subtest: factory filesystem loads and bundled programs execute
+ok 1 - factory filesystem loads and bundled programs execute
+  ---
+  duration_ms: 5.87355
+  type: 'test'
+  ...
+# Subtest: assembly instructions, CMP, branches, little endian memory, stack
+ok 2 - assembly instructions, CMP, branches, little endian memory, stack
+  ---
+  duration_ms: 0.362625
+  type: 'test'
+  ...
+# Subtest: JNZ, JL, JG, numeric jump, PRINTC, labels share line with opcode
+ok 3 - JNZ, JL, JG, numeric jump, PRINTC, labels share line with opcode
+  ---
+  duration_ms: 0.254616
+  type: 'test'
+  ...
+# Subtest: compiler rejects bad operands and control-flow destinations
+ok 4 - compiler rejects bad operands and control-flow destinations
+  ---
+  duration_ms: 0.574958
+  type: 'test'
+  ...
+# Subtest: division by zero and RAM bounds halt and report fault
+ok 5 - division by zero and RAM bounds halt and report fault
+  ---
+  duration_ms: 0.453049
+  type: 'test'
+  ...
+# Subtest: cycle limiter stops infinitely looping program
+ok 6 - cycle limiter stops infinitely looping program
+  ---
+  duration_ms: 16.405467
+  type: 'test'
+  ...
+# Subtest: virtual filesystem traversal, creation, copy, moves, and removal
+ok 7 - virtual filesystem traversal, creation, copy, moves, and removal
+  ---
+  duration_ms: 2.533069
+  type: 'test'
+  ...
+# Subtest: import rejects corrupted backups without changing disk
+ok 8 - import rejects corrupted backups without changing disk
+  ---
+  duration_ms: 2.729269
+  type: 'test'
+  ...
+# Subtest: disk quota and file limit are checked before modification
+ok 9 - disk quota and file limit are checked before modification
+  ---
+  duration_ms: 9.7049
+  type: 'test'
+  ...
+# Subtest: quoted shell argument parsing supports escaped characters and empty strings
+ok 10 - quoted shell argument parsing supports escaped characters and empty strings
+  ---
+  duration_ms: 1.244632
+  type: 'test'
+  ...
+# Subtest: no JS eval, Function constructor, or host process access exposed by VM
+ok 11 - no JS eval, Function constructor, or host process access exposed by VM
+  ---
+  duration_ms: 0.304379
+  type: 'test'
+  ...
+# Subtest: identical responses report exact and normalized match without identity claims
+ok 12 - identical responses report exact and normalized match without identity claims
+  ---
+  duration_ms: 7.257072
+  type: 'test'
+  ...
+# Subtest: normalization separates case and whitespace changes from lexical changes
+ok 13 - normalization separates case and whitespace changes from lexical changes
+  ---
+  duration_ms: 1.825335
+  type: 'test'
+  ...
+# Subtest: different responses reveal structured, lexical and punctuation changes
+ok 14 - different responses reveal structured, lexical and punctuation changes
+  ---
+  duration_ms: 10.788976
+  type: 'test'
+  ...
+# Subtest: punctuation-only edits are not claimed as lexical differences
+ok 15 - punctuation-only edits are not claimed as lexical differences
+  ---
+  duration_ms: 0.449374
+  type: 'test'
+  ...
+# Subtest: one empty response remains comparable, both empty are numerically well defined
+ok 16 - one empty response remains comparable, both empty are numerically well defined
+  ---
+  duration_ms: 0.428542
+  type: 'test'
+  ...
+# Subtest: unicode and emoji can be counted without markup execution
+ok 17 - unicode and emoji can be counted without markup execution
+  ---
+  duration_ms: 1.55792
+  type: 'test'
+  ...
+# Subtest: line diff computes minimal additions and removals for small input
+ok 18 - line diff computes minimal additions and removals for small input
+  ---
+  duration_ms: 0.205703
+  type: 'test'
+  ...
+# Subtest: long outputs trigger bounded explicit diff truncation
+ok 19 - long outputs trigger bounded explicit diff truncation
+  ---
+  duration_ms: 10.901432
+  type: 'test'
+  ...
+# Subtest: differences are symmetric in distance and reverse signs in features
+ok 20 - differences are symmetric in distance and reverse signs in features
+  ---
+  duration_ms: 1.273059
+  type: 'test'
+  ...
+# Subtest: batch report tracks prompt variation without attribution
+ok 21 - batch report tracks prompt variation without attribution
+  ---
+  duration_ms: 4.709853
+  type: 'test'
+  ...
+# Subtest: malformed batch, mixed candidate pairs and excessive text are rejected
+ok 22 - malformed batch, mixed candidate pairs and excessive text are rejected
+  ---
+  duration_ms: 4.700518
+  type: 'test'
+  ...
+# Subtest: repeat analysis gives precisely equal output, no timestamps or random values
+ok 23 - repeat analysis gives precisely equal output, no timestamps or random values
+  ---
+  duration_ms: 0.726683
+  type: 'test'
+  ...
+# Subtest: UI initializes file explorer, memory display, editor and terminal
+ok 24 - UI initializes file explorer, memory display, editor and terminal
+  ---
+  duration_ms: 24.200913
+  type: 'test'
+  ...
+# Subtest: RUN executes a source program and exposes registers and terminal output
+ok 25 - RUN executes a source program and exposes registers and terminal output
+  ---
+  duration_ms: 5.545997
+  type: 'test'
+  ...
+# Subtest: shell creates files, saves edited assembly, and executes it
+ok 26 - shell creates files, saves edited assembly, and executes it
+  ---
+  duration_ms: 5.288126
+  type: 'test'
+  ...
+# Subtest: NTL toolbar opens offline comparison, shows differences, saves report to virtual disk
+ok 27 - NTL toolbar opens offline comparison, shows differences, saves report to virtual disk
+  ---
+  duration_ms: 8.086476
+  type: 'test'
+  ...
+# Subtest: NTL JSON batch compares matched prompts and does not claim identity
+ok 28 - NTL JSON batch compares matched prompts and does not claim identity
+  ---
+  duration_ms: 6.84216
+  type: 'test'
+  ...
+# Subtest: terminal ntl command compares two virtual text files and opens the view
+ok 29 - terminal ntl command compares two virtual text files and opens the view
+  ---
+  duration_ms: 6.61811
+  type: 'test'
+  ...
+# Subtest: invalid NTL JSON produces error without modifying the existing virtual filesystem
+ok 30 - invalid NTL JSON produces error without modifying the existing virtual filesystem
+  ---
+  duration_ms: 2.345282
+  type: 'test'
+  ...
+1..30
+# tests 30
+# suites 0
+# pass 30
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 134.859169

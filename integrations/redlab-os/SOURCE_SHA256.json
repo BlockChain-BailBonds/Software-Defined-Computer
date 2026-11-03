@@ -1,0 +1,19 @@
+{
+  ".gitignore": "22bed6a47a31e4c154344ff178710196055d831e2ccd0f0c7142f647a30454c0",
+  "README.md": "7f7fdf258b9ae4b416e2ad62ef47f27a52a4a7cce3fa7a11856f331e7efa2b6d",
+  "TEST_RESULTS.txt": "258629352388e1f1b4056e602438abab1784a97e5bc939a744ce1dfba1673207",
+  "esp_overlay/usr/bin/evil": "71c94b7aa02134e3b30fa330e5d030366ef7636605ac5c3f181bbc069bee43e5",
+  "manifest.json": "4e73d776a3ba8953ff01b3b8eb0a770ef2169783e663e7403d696944cfb4926e",
+  "phone/redlab.py": "398a6b90160b955c99696dfd7ce23272ff0c93e7643baaf9bda0498bf4d03775",
+  "phone/start.sh": "761a2080d0f3f871042e252856256f37001326e85fd7a50270e7dea59ca82766",
+  "phone/termux-ubuntu.sh": "7d5bb553614dafc2ff728bb1749ea441096d3b6c65153fcc875b0ea896b82bd2",
+  "phone/web/app.js": "4bd6bbdbf1766546e5085495d63b7cb012b395700e7e8ee4bd4508d20008d001",
+  "phone/web/index.html": "f872718e257ae24fba0c9cf00ccb5e7148374f4a9fafae8c3bf45c7344e76708",
+  "phone/web/style.css": "30f60aac9199abc81c25ca4267cb31bc1d005489a94efc6490c004bb3421be89",
+  "tests/test_overlay.py": "4fb2a6192cd9e584a7b0d7e01f479210c81e99926e95c43615136cfde478a5df",
+  "tests/test_redlab.py": "d59bd5fa3c5f4b95135c03ca35eaae9cd594bc07f2c4e0186aeffea4c785c024",
+  "tools/build.sh": "81cccbf0a29d4a2712a176ce191c018f61573211cc2782ea1c2bfad636c29f7f",
+  "tools/integrate.py": "1c8ff1e3948b1112fada9a4e013102b2a746ac063b82bc6f0569930cc8ebf959",
+  "tools/verify_release.py": "60193c7513d503ce205fec2bbc1da88e7bd70511fc88ab85fc80cbc6a7bedfc8",
+  "vm/internal_computer.html": "bf95632818a9e62b2f739af38acbff3a6eecaa4bc0cb9808812a9573c3e7cda2"
+}

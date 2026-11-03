@@ -1,0 +1,501 @@
+{
+  "schema_version": 1,
+  "release_date": "2026-11-03",
+  "files": [
+    {
+      "path": ".github/CODEOWNERS",
+      "sha256": "c084bb355d899a86a015b77c9f81a66d0be0f59998af7f86c46ebc644ce897e4",
+      "bytes": 117
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "9beea77efe00a69fb4c1a6a8572b1f3b0f255bfc8950a0b7292f03a0ec12e3a4",
+      "bytes": 655
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "172a735e741a2bb71ca513f7e2e05ff3f6f8efb7ca3bd89997df856be7e73ed6",
+      "bytes": 177
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "3d5e3b2b75467aa9b77eb740070ce1486982acbe04276bab8e2bc3d11eb41f78",
+      "bytes": 1070
+    },
+    {
+      "path": "IP/CONTRIBUTOR_AND_BRAND_POLICY.md",
+      "sha256": "b4c3e753681287c0d4716b5f607e8522e61ac2e6bc2824d728cfa71b737c4a8e",
+      "bytes": 1084
+    },
+    {
+      "path": "IP/INVENTION_RECORD.md",
+      "sha256": "f1de80ea64f5675dc655286e4c0abc6b91ccddbe95a3f17e6171b5ed7fbbe92d",
+      "bytes": 3289
+    },
+    {
+      "path": "IP/IP_REGISTER.md",
+      "sha256": "4a8648dbce134048764ed0ffeabe4780e94cd8168bc5445719c78b5a45b6018b",
+      "bytes": 2957
+    },
+    {
+      "path": "IP/PATENT_AND_PUBLICATION.md",
+      "sha256": "b382a2e14466806103e25642c9320f4760ea7baf1b9cffd6f9d0dea8c4a78b3a",
+      "bytes": 1691
+    },
+    {
+      "path": "IP/RIGHTS_PROVENANCE.md",
+      "sha256": "c94189573fae43e17bfe725958573cbbf235362203a3fc0a3f319c718f2a500d",
+      "bytes": 1769
+    },
+    {
+      "path": "IP/THIRD_PARTY_REVIEW.md",
+      "sha256": "62879f441dd02d9178aacd88f89aae940e25328bc6057bccb767f929fc862e2a",
+      "bytes": 1207
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "1e85ba96f08efd7922e0103f3372aa83b83e7595438ed1933abc655ba9cf3561",
+      "bytes": 1253
+    },
+    {
+      "path": "README.md",
+      "sha256": "9b738f9ecbfa974723fa64cb58c1d0710f5208c99137ea81c746bad661a74445",
+      "bytes": 6637
+    },
+    {
+      "path": "SECURITY.md",
+      "sha256": "06d6af1de0fd0fa05709d0ae5a3c147aaf6c03da454267289599601011cbd2b7",
+      "bytes": 1238
+    },
+    {
+      "path": "core/README.md",
+      "sha256": "cedb090168e7f3e531145952995ecfd1921d7f4da991c938f7f3ccf0397bd694",
+      "bytes": 4771
+    },
+    {
+      "path": "core/app.js",
+      "sha256": "c60b097e0f95c223b58bbfc8961ba3668f42b792223eab73e851db444a40415c",
+      "bytes": 20781
+    },
+    {
+      "path": "core/build.py",
+      "sha256": "d15c5bd439b7f76c22f09a4a2664494617f1f6be502523f00228d7288eee98ee",
+      "bytes": 1018
+    },
+    {
+      "path": "core/core.js",
+      "sha256": "5c29d33d3b8f36c7a9ef722c129b305bbeb497a9a7af9ac2213ffba77e57eeb7",
+      "bytes": 19704
+    },
+    {
+      "path": "core/core.test.js",
+      "sha256": "9e6e18c63b35752e3e2b00fee86915d0df9233de0a6798ac3eeb3ecae905ac16",
+      "bytes": 5924
+    },
+    {
+      "path": "core/index.html",
+      "sha256": "71628fcb72ad45b454a73b18b2a8fbf1b0024091984a45f9df0319c4b2526a52",
+      "bytes": 6896
+    },
+    {
+      "path": "core/internal_computer.html",
+      "sha256": "bf95632818a9e62b2f739af38acbff3a6eecaa4bc0cb9808812a9573c3e7cda2",
+      "bytes": 55420
+    },
+    {
+      "path": "core/style.css",
+      "sha256": "92bf59b4d68a82bf80072571fb56315659a8c7c68fe7092c2f0e530493be2b33",
+      "bytes": 8084
+    },
+    {
+      "path": "core/test-results.txt",
+      "sha256": "0071d7c876311a211245b04a5de59d483221ef4004a697d747a58cc460844eac",
+      "bytes": 2832
+    },
+    {
+      "path": "core/ui.smoke.test.js",
+      "sha256": "ba3298b18f1c2a99e2d932913917b03971b8d82af568c4bb89ae5d658f5dabd3",
+      "bytes": 4266
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "885f37e346baec6a9edd6eb56e1a88031f82fb6609e7817aaf2d66e87fc49dd2",
+      "bytes": 3936
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "sha256": "9c9f525bc8d07c8f5a5a82c91c2a627c075e123b551431cf24d9d66dde70c846",
+      "bytes": 2122
+    },
+    {
+      "path": "docs/VALIDATION.md",
+      "sha256": "d958870108dee9ab3f7477d1dd820767531946953af082180e25a02e44513428",
+      "bytes": 1549
+    },
+    {
+      "path": "extensions/ntl/MANIFEST.sha256",
+      "sha256": "8baec67c80ee53fcee9ad0302e4c87c3d43f3438d395395bc35290e567687ca0",
+      "bytes": 1115
+    },
+    {
+      "path": "extensions/ntl/NTL_README.md",
+      "sha256": "fe612ee2324205a74e1d3bb2208f1ba1172cffc7d463f82db0474a0ad172c278",
+      "bytes": 5687
+    },
+    {
+      "path": "extensions/ntl/README.md",
+      "sha256": "d1ab04195ecec0f9d50e8acae108c470de57cfb33221bc2eccd8f01a7ae57041",
+      "bytes": 5361
+    },
+    {
+      "path": "extensions/ntl/app.js",
+      "sha256": "23907cde7f6545c72d92c3804181037a1ab0a3313f1841a4d8ea07aaaa7af18a",
+      "bytes": 32631
+    },
+    {
+      "path": "extensions/ntl/build.py",
+      "sha256": "452f0574ac07740d0e7312ad42eacd856246436296c69910f5c831035b20e90c",
+      "bytes": 1144
+    },
+    {
+      "path": "extensions/ntl/core.js",
+      "sha256": "5c29d33d3b8f36c7a9ef722c129b305bbeb497a9a7af9ac2213ffba77e57eeb7",
+      "bytes": 19704
+    },
+    {
+      "path": "extensions/ntl/core.test.js",
+      "sha256": "9e6e18c63b35752e3e2b00fee86915d0df9233de0a6798ac3eeb3ecae905ac16",
+      "bytes": 5924
+    },
+    {
+      "path": "extensions/ntl/index.html",
+      "sha256": "80b49f37923f4c7c57e9a7d8dad688d4b77717e6562b6946977c61e76bc0c0c9",
+      "bytes": 10052
+    },
+    {
+      "path": "extensions/ntl/internal_computer.html",
+      "sha256": "07770886a7b4d9d32b96bcf77a8bbd48764a717c4f6db59aa1efa82de74bcdd6",
+      "bytes": 84592
+    },
+    {
+      "path": "extensions/ntl/ntl_batch_example.json",
+      "sha256": "814e01f5ea78c19c9f4a34c57003d2cf7f053850a6d25536169e209e47fefcf0",
+      "bytes": 809
+    },
+    {
+      "path": "extensions/ntl/ntl_diff.js",
+      "sha256": "27b054cac9c9bab794fbae5199ccc29a2093e10283e81c603fa3826ab7bf6700",
+      "bytes": 12385
+    },
+    {
+      "path": "extensions/ntl/ntl_diff.test.js",
+      "sha256": "c3ea765dbd3d0aeb115de964cd790053d4eecbed3bc7c5f07f5df1f19b76ccc4",
+      "bytes": 4805
+    },
+    {
+      "path": "extensions/ntl/style.css",
+      "sha256": "2d9378806d133c47c6f37156d65093a965a28841ac0d0880d4fc7d5867934e2a",
+      "bytes": 9880
+    },
+    {
+      "path": "extensions/ntl/test-results.txt",
+      "sha256": "cf4966859ca78bb523cc519a5df5a64bac0afaadb2dbb2f46336b2404270b4a7",
+      "bytes": 6193
+    },
+    {
+      "path": "extensions/ntl/ui.smoke.test.js",
+      "sha256": "750e08a5ea8c1598c7fd232e3964113e63fc09001c2726dae9aaee85fb41ed21",
+      "bytes": 6908
+    },
+    {
+      "path": "integrations/agency-lab/.gitignore",
+      "sha256": "5c48216109752c81eea61798c8a1d629d16dedcb8bdc6623d2094bd5f2152046",
+      "bytes": 71
+    },
+    {
+      "path": "integrations/agency-lab/CHANGELOG.md",
+      "sha256": "6d1510b25de3929d950632c6b8a88e177d932e0dd5bde4bb1151b7b3cf4a1bc9",
+      "bytes": 1265
+    },
+    {
+      "path": "integrations/agency-lab/MANIFEST.sha256",
+      "sha256": "7e8b03a61ef2c5a6cbf9c77b94f1b25d4d28022a362bc82a56432d5ad89e9e8d",
+      "bytes": 3132
+    },
+    {
+      "path": "integrations/agency-lab/README.md",
+      "sha256": "cfd6aef21cc594130bbe40ee550ff7c15a3a7cce08a5f1a5db69a90a93390c2a",
+      "bytes": 13971
+    },
+    {
+      "path": "integrations/agency-lab/agency/__init__.py",
+      "sha256": "cf7f6ec1452becd97a21e6c28b4eb940553476862747f6986f79e8651679f936",
+      "bytes": 71
+    },
+    {
+      "path": "integrations/agency-lab/agency/api.py",
+      "sha256": "e85be87fae822198a5460302d71fd55d07ec1a2991a47dcfa28604a843a6b077",
+      "bytes": 17957
+    },
+    {
+      "path": "integrations/agency-lab/agency/catalog.py",
+      "sha256": "f84988e01a79b06234ea8fe82b1ceedede729cbbcc0a17ad75831d7f8d4f33be",
+      "bytes": 2836
+    },
+    {
+      "path": "integrations/agency-lab/agency/core.py",
+      "sha256": "ee480507c15ff6fb99d597546ec1c98301d03b2d19ec316cacbff1a3bfa5bf13",
+      "bytes": 21683
+    },
+    {
+      "path": "integrations/agency-lab/agency/llm.py",
+      "sha256": "382d6228ff57682fee42c36c9937c76be1fd7acd760872686cd0b58902f67d96",
+      "bytes": 1926
+    },
+    {
+      "path": "integrations/agency-lab/agency/vm_lab.py",
+      "sha256": "6eea6633e7271d4c26f950b10c5e119af1ea29fec9d838f2478000e4486f97f0",
+      "bytes": 4652
+    },
+    {
+      "path": "integrations/agency-lab/bridge/broker_probe.py",
+      "sha256": "a8faa5acb1987968a7985a8ad40357f1b48e548f322ee3cfd8a6a47b19df811a",
+      "bytes": 3425
+    },
+    {
+      "path": "integrations/agency-lab/bridge/serial_bridge.py",
+      "sha256": "216cc97be4df9329d77d4a330894152edbb903b00a8c33cdf4d03cfffe490634",
+      "bytes": 5097
+    },
+    {
+      "path": "integrations/agency-lab/docs/BASELINE_PROVENANCE.txt",
+      "sha256": "59a8bb9c6594bc7ed3086889532e6409977e24e138ffb576ed6e89fa6021a9c4",
+      "bytes": 459
+    },
+    {
+      "path": "integrations/agency-lab/docs/HARDWARE_ACCEPTANCE.md",
+      "sha256": "b8f4ee26c11fb19749f862d534bd388fefa2d21a7004d205dd7fdcdbd86b3f0e",
+      "bytes": 5314
+    },
+    {
+      "path": "integrations/agency-lab/docs/ORIGINAL_v0.1.0_MANIFEST.sha256",
+      "sha256": "0e92047ba2ce76482ae7dcd92df3452f76abe17f08fcd4e6bd5a234ca990a328",
+      "bytes": 1643
+    },
+    {
+      "path": "integrations/agency-lab/docs/VM_INTEGRATION.md",
+      "sha256": "ee8a0c849d2c37a7959984d8d4043c6ff8a6fd1ccd85e37b452d9e6365281c7d",
+      "bytes": 8327
+    },
+    {
+      "path": "integrations/agency-lab/firmware/uart_wifi_gateway/platformio.ini",
+      "sha256": "d69e8ca4662a2d9768bf88d21868db09914b41474aadce9937e69203a608ec6d",
+      "bytes": 293
+    },
+    {
+      "path": "integrations/agency-lab/firmware/uart_wifi_gateway/src/main.cpp",
+      "sha256": "e73de8494ebb814e8ef7c4f396f5fd32e520a326a1ed95a0006ade0f66291175",
+      "bytes": 12408
+    },
+    {
+      "path": "integrations/agency-lab/requirements-dev.txt",
+      "sha256": "8636f9ab1a075be9f3039e2a6471837259c4f36b625bcaf7a3d9a1edd2419c6d",
+      "bytes": 34
+    },
+    {
+      "path": "integrations/agency-lab/requirements.txt",
+      "sha256": "5db213511e1cde5e308385d85b4b706972fda785cfe22cc7ee36df15e802b25d",
+      "bytes": 84
+    },
+    {
+      "path": "integrations/agency-lab/scripts/check-integration.sh",
+      "sha256": "caecbb32488ad42dcfbd7408cd38c83f022562b579e77309b6f2714cbccdfbfa",
+      "bytes": 470
+    },
+    {
+      "path": "integrations/agency-lab/scripts/gguf-server.sh",
+      "sha256": "93485a4cf3813bc2f42913000b275ad42e4d0b3444f070f0cbce86a27e278115",
+      "bytes": 403
+    },
+    {
+      "path": "integrations/agency-lab/scripts/start.sh",
+      "sha256": "486216e64cf5a3bb3aeba31c37839bde49f2ec2773477973345d4b85b97ee84a",
+      "bytes": 482
+    },
+    {
+      "path": "integrations/agency-lab/tests/test_api.py",
+      "sha256": "a856edf35c8fdc6d7a40eccb61dbfd939e0b84abc240ab762e7c2ec52d07b378",
+      "bytes": 6560
+    },
+    {
+      "path": "integrations/agency-lab/tests/test_store.py",
+      "sha256": "ace1a70a8260422df212e8aff24999d5873b74ea8dd4dedee122dd2e00cf0223",
+      "bytes": 3906
+    },
+    {
+      "path": "integrations/agency-lab/tests/test_vm_integration.py",
+      "sha256": "6133bc55a62273490d14a8b2f6c510555228d44390ceba2554b28a3cc62edf8b",
+      "bytes": 8775
+    },
+    {
+      "path": "integrations/agency-lab/tools/vm_runner.js",
+      "sha256": "29c846e40cae2259166f7fea200d37b336d7437ecc71332b4e8b648da6e23810",
+      "bytes": 2427
+    },
+    {
+      "path": "integrations/agency-lab/web/index.html",
+      "sha256": "ad8b062316bc12fef9e1946b3d7194c5f6c848f3d86965bafa26112c2e8e8013",
+      "bytes": 21306
+    },
+    {
+      "path": "integrations/agency-lab/web/vm/README.md",
+      "sha256": "cedb090168e7f3e531145952995ecfd1921d7f4da991c938f7f3ccf0397bd694",
+      "bytes": 4771
+    },
+    {
+      "path": "integrations/agency-lab/web/vm/app.js",
+      "sha256": "c60b097e0f95c223b58bbfc8961ba3668f42b792223eab73e851db444a40415c",
+      "bytes": 20781
+    },
+    {
+      "path": "integrations/agency-lab/web/vm/build.py",
+      "sha256": "d15c5bd439b7f76c22f09a4a2664494617f1f6be502523f00228d7288eee98ee",
+      "bytes": 1018
+    },
+    {
+      "path": "integrations/agency-lab/web/vm/core.js",
+      "sha256": "5c29d33d3b8f36c7a9ef722c129b305bbeb497a9a7af9ac2213ffba77e57eeb7",
+      "bytes": 19704
+    },
+    {
+      "path": "integrations/agency-lab/web/vm/core.test.js",
+      "sha256": "9e6e18c63b35752e3e2b00fee86915d0df9233de0a6798ac3eeb3ecae905ac16",
+      "bytes": 5924
+    },
+    {
+      "path": "integrations/agency-lab/web/vm/index.html",
+      "sha256": "71628fcb72ad45b454a73b18b2a8fbf1b0024091984a45f9df0319c4b2526a52",
+      "bytes": 6896
+    },
+    {
+      "path": "integrations/agency-lab/web/vm/internal_computer.html",
+      "sha256": "bf95632818a9e62b2f739af38acbff3a6eecaa4bc0cb9808812a9573c3e7cda2",
+      "bytes": 55420
+    },
+    {
+      "path": "integrations/agency-lab/web/vm/style.css",
+      "sha256": "92bf59b4d68a82bf80072571fb56315659a8c7c68fe7092c2f0e530493be2b33",
+      "bytes": 8084
+    },
+    {
+      "path": "integrations/agency-lab/web/vm/ui.smoke.test.js",
+      "sha256": "ba3298b18f1c2a99e2d932913917b03971b8d82af568c4bb89ae5d658f5dabd3",
+      "bytes": 4266
+    },
+    {
+      "path": "integrations/redlab-os/.gitignore",
+      "sha256": "22bed6a47a31e4c154344ff178710196055d831e2ccd0f0c7142f647a30454c0",
+      "bytes": 84
+    },
+    {
+      "path": "integrations/redlab-os/README.md",
+      "sha256": "7f7fdf258b9ae4b416e2ad62ef47f27a52a4a7cce3fa7a11856f331e7efa2b6d",
+      "bytes": 9541
+    },
+    {
+      "path": "integrations/redlab-os/SOURCE_SHA256.json",
+      "sha256": "1c81d002bd6ff45798c33bac48f1c2c705d5f5900b79879dc66d41ecdf3c676e",
+      "bytes": 1560
+    },
+    {
+      "path": "integrations/redlab-os/TEST_RESULTS.txt",
+      "sha256": "258629352388e1f1b4056e602438abab1784a97e5bc939a744ce1dfba1673207",
+      "bytes": 3062
+    },
+    {
+      "path": "integrations/redlab-os/esp_overlay/usr/bin/evil",
+      "sha256": "71c94b7aa02134e3b30fa330e5d030366ef7636605ac5c3f181bbc069bee43e5",
+      "bytes": 3938
+    },
+    {
+      "path": "integrations/redlab-os/manifest.json",
+      "sha256": "4e73d776a3ba8953ff01b3b8eb0a770ef2169783e663e7403d696944cfb4926e",
+      "bytes": 887
+    },
+    {
+      "path": "integrations/redlab-os/phone/redlab.py",
+      "sha256": "398a6b90160b955c99696dfd7ce23272ff0c93e7643baaf9bda0498bf4d03775",
+      "bytes": 24268
+    },
+    {
+      "path": "integrations/redlab-os/phone/start.sh",
+      "sha256": "761a2080d0f3f871042e252856256f37001326e85fd7a50270e7dea59ca82766",
+      "bytes": 110
+    },
+    {
+      "path": "integrations/redlab-os/phone/termux-ubuntu.sh",
+      "sha256": "7d5bb553614dafc2ff728bb1749ea441096d3b6c65153fcc875b0ea896b82bd2",
+      "bytes": 779
+    },
+    {
+      "path": "integrations/redlab-os/phone/web/app.js",
+      "sha256": "4bd6bbdbf1766546e5085495d63b7cb012b395700e7e8ee4bd4508d20008d001",
+      "bytes": 5058
+    },
+    {
+      "path": "integrations/redlab-os/phone/web/index.html",
+      "sha256": "f872718e257ae24fba0c9cf00ccb5e7148374f4a9fafae8c3bf45c7344e76708",
+      "bytes": 5210
+    },
+    {
+      "path": "integrations/redlab-os/phone/web/style.css",
+      "sha256": "30f60aac9199abc81c25ca4267cb31bc1d005489a94efc6490c004bb3421be89",
+      "bytes": 5129
+    },
+    {
+      "path": "integrations/redlab-os/tests/test_overlay.py",
+      "sha256": "4fb2a6192cd9e584a7b0d7e01f479210c81e99926e95c43615136cfde478a5df",
+      "bytes": 1882
+    },
+    {
+      "path": "integrations/redlab-os/tests/test_redlab.py",
+      "sha256": "d59bd5fa3c5f4b95135c03ca35eaae9cd594bc07f2c4e0186aeffea4c785c024",
+      "bytes": 6297
+    },
+    {
+      "path": "integrations/redlab-os/tools/build.sh",
+      "sha256": "81cccbf0a29d4a2712a176ce191c018f61573211cc2782ea1c2bfad636c29f7f",
+      "bytes": 508
+    },
+    {
+      "path": "integrations/redlab-os/tools/integrate.py",
+      "sha256": "1c8ff1e3948b1112fada9a4e013102b2a746ac063b82bc6f0569930cc8ebf959",
+      "bytes": 4112
+    },
+    {
+      "path": "integrations/redlab-os/tools/verify_release.py",
+      "sha256": "60193c7513d503ce205fec2bbc1da88e7bd70511fc88ab85fc80cbc6a7bedfc8",
+      "bytes": 1207
+    },
+    {
+      "path": "integrations/redlab-os/vm/internal_computer.html",
+      "sha256": "bf95632818a9e62b2f739af38acbff3a6eecaa4bc0cb9808812a9573c3e7cda2",
+      "bytes": 55420
+    },
+    {
+      "path": "scripts/build_release_manifest.py",
+      "sha256": "acc5a5b1bc2b130064a73535c0320e57aee6348cb14f934fbd93b83c586421dd",
+      "bytes": 1164
+    },
+    {
+      "path": "scripts/verify.sh",
+      "sha256": "e41e44462c5d5cd0fce1ce9c7d456e5e402ed49ad47469ff66c7bb70f9cc6f8a",
+      "bytes": 503
+    },
+    {
+      "path": "scripts/verify_release.py",
+      "sha256": "d6fd58c52f469298e12c7fa53e41b8dbf080e37ae6507968aea17cc05efbde38",
+      "bytes": 2039
+    }
+  ]
+}

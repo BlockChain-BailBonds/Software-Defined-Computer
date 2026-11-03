@@ -1,0 +1,4 @@
+fbe776785734f65c5c7bfcf61464276125eb23beb038b134b32cd0182c230afd  Evil_Agency_Lab_UART_Swarm_v0.1.0.zip
+f8422a8cee48172bcbf6031d3abfdc110690e4eeeba8e3accaec33810c9d2167  internal_computer_source(1).zip
+Original VM core.js, app.js, index.html, style.css and internal_computer.html were copied byte-for-byte; reference the original source archive above.
+Original Agency Lab v0.1.0 remains untouched in its original ZIP; this is a separate derived distribution.

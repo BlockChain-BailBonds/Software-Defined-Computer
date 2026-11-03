@@ -1,0 +1,43 @@
+test_manifest (test_overlay.PackagingTests.test_manifest) ... ok
+test_no_flash_command_in_overlay (test_overlay.PackagingTests.test_no_flash_command_in_overlay) ... ok
+test_python_compilation (test_overlay.PackagingTests.test_python_compilation) ... ok
+test_scripts_do_not_flash_by_default (test_overlay.PackagingTests.test_scripts_do_not_flash_by_default) ... ok
+test_shell_help (test_overlay.PackagingTests.test_shell_help) ... ok
+test_shell_syntax (test_overlay.PackagingTests.test_shell_syntax) ... ok
+test_unsupported_subcommand (test_overlay.PackagingTests.test_unsupported_subcommand) ... ok
+test_upstream_pinned (test_overlay.PackagingTests.test_upstream_pinned) ... ok
+test_auth_required (test_redlab.HTTPTests.test_auth_required) ... [redlab] "GET /api/status HTTP/1.1" 401 -
+ok
+test_bad_origin_rejected (test_redlab.HTTPTests.test_bad_origin_rejected) ... [redlab] "GET /api/status HTTP/1.1" 403 -
+ok
+test_can_add_scope_with_confirmation (test_redlab.HTTPTests.test_can_add_scope_with_confirmation) ... [redlab] "POST /api/targets HTTP/1.1" 200 -
+ok
+test_reject_unauthorized_scope_add (test_redlab.HTTPTests.test_reject_unauthorized_scope_add) ... [redlab] "POST /api/targets HTTP/1.1" 400 -
+ok
+test_status_authorized (test_redlab.HTTPTests.test_status_authorized) ... [redlab] "GET /api/status HTTP/1.1" 200 -
+ok
+test_virtual_machine_asset (test_redlab.HTTPTests.test_virtual_machine_asset) ... [redlab] "GET /vm HTTP/1.1" 200 -
+ok
+test_board_command_allowlist (test_redlab.LabTests.test_board_command_allowlist) ... ok
+test_deterministic_agent (test_redlab.LabTests.test_deterministic_agent) ... ok
+test_event_truncation_for_response (test_redlab.LabTests.test_event_truncation_for_response) ... ok
+test_probe_blocked_without_scope (test_redlab.LabTests.test_probe_blocked_without_scope) ... ok
+test_public_scope_refused (test_redlab.LabTests.test_public_scope_refused) ... ok
+test_reports_are_not_exploit_claims (test_redlab.LabTests.test_reports_are_not_exploit_claims) ... ok
+test_scope_requires_consent (test_redlab.LabTests.test_scope_requires_consent) ... ok
+test_scope_round_trip (test_redlab.LabTests.test_scope_round_trip) ... ok
+test_tcp_probe_local_open (test_redlab.LabTests.test_tcp_probe_local_open) ... ok
+test_approve_private_address (test_redlab.ValidationTests.test_approve_private_address) ... ok
+test_dns_rebinding_guard (test_redlab.ValidationTests.test_dns_rebinding_guard) ... ok
+test_hostname (test_redlab.ValidationTests.test_hostname) ... ok
+test_ipv4 (test_redlab.ValidationTests.test_ipv4) ... ok
+test_ports_are_explicit (test_redlab.ValidationTests.test_ports_are_explicit) ... ok
+test_reject_boolean_port (test_redlab.ValidationTests.test_reject_boolean_port) ... ok
+test_reject_public_address (test_redlab.ValidationTests.test_reject_public_address) ... ok
+test_reject_shell_payload (test_redlab.ValidationTests.test_reject_shell_payload) ... ok
+test_single_label (test_redlab.ValidationTests.test_single_label) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 3.103s
+
+OK

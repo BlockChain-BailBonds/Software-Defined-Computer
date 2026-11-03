@@ -1,0 +1,20 @@
+{
+  "format": "NTL_DIFF_BATCH",
+  "version": 1,
+  "cases": [
+    {
+      "prompt": "Explain checksum validation in two sentences.",
+      "labelA": "Model A",
+      "labelB": "Model B",
+      "responseA": "A checksum summarizes file content. Compare the saved checksum with a fresh one to detect accidental changes.",
+      "responseB": "Checksums help detect file changes. Compute the digest again and compare the values; a match does not guarantee authenticity."
+    },
+    {
+      "prompt": "List three ways to organize a Python project.",
+      "labelA": "Model A",
+      "labelB": "Model B",
+      "responseA": "- Separate source and tests.\n- Keep dependencies pinned.\n- Document setup steps.",
+      "responseB": "1. Use a src/ folder.\n2. Pin dependencies.\n3. Write a README and tests."
+    }
+  ]
+}

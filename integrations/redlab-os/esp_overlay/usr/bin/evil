@@ -1,0 +1,88 @@
+#!/bin/sh
+# Evil Inspector Gadget RedLab OS — shell applet for native ESP32-S3 Linux.
+# Read-only diagnostics by default. No transmissions or scanning.
+set -eu
+printf_status() {
+  printf '%s\n' 'EVIL INSPECTOR GADGET | REDLAB OS' '918 Technologies | ESP32-S3 N16R8'
+  uname -srm 2>/dev/null || :
+  printf 'hostname: '; hostname 2>/dev/null || printf 'unavailable\n'
+  printf 'uptime: '; cat /proc/uptime 2>/dev/null || printf 'unavailable\n'
+  printf 'memory:\n'; grep -E '^(MemTotal|MemFree|MemAvailable):' /proc/meminfo 2>/dev/null || :
+  printf 'python: '; if command -v micropython >/dev/null 2>&1; then printf 'MicroPython available\n'; else printf 'not installed\n'; fi
+}
+help() {
+  cat <<'HELP'
+EVIL INSPECTOR GADGET — MOBILE RED LAB (ESP32-S3)
+  evil help         Show available commands
+  evil about        Build identity and limitations
+  evil status       Kernel, memory, uptime and MicroPython
+  evil network      Local interface and route information
+  evil storage      Mounted filesystems and free space
+  evil processes    Local process snapshot
+  evil selftest     Read-only runtime diagnostic checks
+  evil python FILE  Run an existing MicroPython script from /home/root
+  evil note TEXT    Append operator note to persistent /home/root/evil-notes.txt
+No exploit payloads, network sweeps or RF transmissions are included.
+The authorized network probe suite and AI analysis run on the phone host.
+HELP
+}
+about() {
+  printf '%s\n' 'Evil Inspector Gadget RedLab OS v0.1.0' \
+    'Target: ESP32-S3 N16R8, native Linux-on-esp32-S3 userspace overlay' \
+    'Linux is native NOMMU Xtensa; this is NOT Canonical Ubuntu, apt or CPython.' \
+    'Upstream security caveat: NO MMU isolation. Keep it on a trusted lab LAN.'
+}
+network() {
+  if command -v ip >/dev/null 2>&1; then
+    ip -brief addr 2>/dev/null || ip addr show 2>/dev/null || :
+    ip route show 2>/dev/null || :
+  else
+    cat /proc/net/dev 2>/dev/null || :
+    cat /proc/net/route 2>/dev/null || :
+  fi
+}
+selftest() {
+  rc=0
+  for file in /proc/meminfo /proc/uptime /proc/net/dev; do
+    if test -r "$file"; then printf 'PASS readable %s\n' "$file"; else printf 'FAIL unreadable %s\n' "$file"; rc=1; fi
+  done
+  for app in sh awk grep; do
+    if command -v "$app" >/dev/null 2>&1; then printf 'PASS command %s\n' "$app"; else printf 'FAIL missing %s\n' "$app"; rc=1; fi
+  done
+  if test -d /home/root && test -w /home/root; then printf 'PASS /home/root writable\n'; else printf 'WARN /home/root unavailable or read-only\n'; fi
+  return "$rc"
+}
+python_script() {
+  if test "$#" -ne 1; then printf 'usage: evil python FILENAME\n' >&2; return 2; fi
+  case "$1" in
+    ''|*/*|.*|*..*) printf 'Only simple filenames under /home/root are allowed\n' >&2; return 2 ;;
+  esac
+  case "$1" in
+    *[!a-zA-Z0-9_.-]*) printf 'Invalid filename\n' >&2; return 2 ;;
+  esac
+  if ! command -v micropython >/dev/null 2>&1; then printf 'MicroPython unavailable\n' >&2; return 1; fi
+  if ! test -f "/home/root/$1"; then printf 'Script not found\n' >&2; return 1; fi
+  micropython "/home/root/$1"
+}
+operator_note() {
+  test "$#" -gt 0 || { printf 'usage: evil note TEXT\n' >&2; return 2; }
+  test -d /home/root && test -w /home/root || { printf '/home/root not writable\n' >&2; return 1; }
+  text=$*
+  test "${#text}" -le 256 || { printf 'Note exceeds 256 characters\n' >&2; return 2; }
+  date_utc=$(date -u '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || printf 'time-unknown')
+  (umask 077; printf '%s | %s\n' "$date_utc" "$text" >> /home/root/evil-notes.txt)
+  printf '%s\n' 'Note saved'
+}
+cmd=${1:-help}; shift || :
+case "$cmd" in
+  help|-h|--help) help ;;
+  about|version) about ;;
+  status) printf_status ;;
+  network) network ;;
+  storage) df -h 2>/dev/null || cat /proc/mounts 2>/dev/null ;;
+  processes) ps 2>/dev/null || : ;;
+  selftest) selftest ;;
+  python) python_script "$@" ;;
+  note) operator_note "$@" ;;
+  *) printf 'Unknown command: %s\n' "$cmd" >&2; help >&2; exit 2 ;;
+esac

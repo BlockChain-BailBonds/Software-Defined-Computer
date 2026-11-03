@@ -1,0 +1,94 @@
+TAP version 13
+# Subtest: factory filesystem loads and bundled programs execute
+ok 1 - factory filesystem loads and bundled programs execute
+  ---
+  duration_ms: 6.685643
+  type: 'test'
+  ...
+# Subtest: assembly instructions, CMP, branches, little endian memory, stack
+ok 2 - assembly instructions, CMP, branches, little endian memory, stack
+  ---
+  duration_ms: 0.504058
+  type: 'test'
+  ...
+# Subtest: JNZ, JL, JG, numeric jump, PRINTC, labels share line with opcode
+ok 3 - JNZ, JL, JG, numeric jump, PRINTC, labels share line with opcode
+  ---
+  duration_ms: 0.269625
+  type: 'test'
+  ...
+# Subtest: compiler rejects bad operands and control-flow destinations
+ok 4 - compiler rejects bad operands and control-flow destinations
+  ---
+  duration_ms: 0.794374
+  type: 'test'
+  ...
+# Subtest: division by zero and RAM bounds halt and report fault
+ok 5 - division by zero and RAM bounds halt and report fault
+  ---
+  duration_ms: 0.548915
+  type: 'test'
+  ...
+# Subtest: cycle limiter stops infinitely looping program
+ok 6 - cycle limiter stops infinitely looping program
+  ---
+  duration_ms: 17.490769
+  type: 'test'
+  ...
+# Subtest: virtual filesystem traversal, creation, copy, moves, and removal
+ok 7 - virtual filesystem traversal, creation, copy, moves, and removal
+  ---
+  duration_ms: 1.107044
+  type: 'test'
+  ...
+# Subtest: import rejects corrupted backups without changing disk
+ok 8 - import rejects corrupted backups without changing disk
+  ---
+  duration_ms: 1.07059
+  type: 'test'
+  ...
+# Subtest: disk quota and file limit are checked before modification
+ok 9 - disk quota and file limit are checked before modification
+  ---
+  duration_ms: 6.901146
+  type: 'test'
+  ...
+# Subtest: quoted shell argument parsing supports escaped characters and empty strings
+ok 10 - quoted shell argument parsing supports escaped characters and empty strings
+  ---
+  duration_ms: 0.742306
+  type: 'test'
+  ...
+# Subtest: no JS eval, Function constructor, or host process access exposed by VM
+ok 11 - no JS eval, Function constructor, or host process access exposed by VM
+  ---
+  duration_ms: 0.334153
+  type: 'test'
+  ...
+# Subtest: UI initializes file explorer, memory display, editor and terminal
+ok 12 - UI initializes file explorer, memory display, editor and terminal
+  ---
+  duration_ms: 25.225169
+  type: 'test'
+  ...
+# Subtest: RUN executes a source program and exposes registers and terminal output
+ok 13 - RUN executes a source program and exposes registers and terminal output
+  ---
+  duration_ms: 5.397495
+  type: 'test'
+  ...
+# Subtest: shell creates files, saves edited assembly, and executes it
+ok 14 - shell creates files, saves edited assembly, and executes it
+  ---
+  duration_ms: 3.646873
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 114.003712

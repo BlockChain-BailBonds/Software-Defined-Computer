@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>918 Technologies · Evil Agency Lab</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0e14;--panel:#151b25;--panel2:#1b2330;--line:#354153;--text:#e9eff6;--muted:#94a4b5;--blue:#7bc5ff;--green:#9eeac2;--warn:#f0cb80}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Arial,sans-serif;line-height:1.45}
+header{padding:1rem max(1rem,calc((100vw - 1300px)/2));background:#111824;border-bottom:1px solid var(--line);display:flex;gap:1rem;justify-content:space-between;flex-wrap:wrap}
+h1,h2,h3{margin:.2rem 0 .8rem} h1{font-size:1.35rem} h2{font-size:1.12rem} h3{font-size:.95rem}
+small,.muted{color:var(--muted)}main{max-width:1300px;margin:auto;padding:1rem;display:grid;grid-template-columns:minmax(245px,1fr) minmax(360px,2fr) minmax(260px,1.25fr);gap:1rem}
+section,.panel{border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:1rem;min-width:0}
+input,textarea,select,button{font:inherit;border-radius:6px}input,textarea,select{background:#0b111a;color:var(--text);border:1px solid #526072;padding:.55rem;width:100%;margin:.25rem 0 .55rem}textarea{min-height:75px;resize:vertical}
+button{border:1px solid #53708a;color:var(--text);background:#25384c;padding:.5rem .7rem;cursor:pointer}button:hover{background:#35506d}button.primary{background:#155c78;border-color:#419bb9}
+.line{border-top:1px solid var(--line);margin:1rem 0}.row{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row>button{flex:0 0 auto}
+.item{padding:.7rem;border:1px solid #334052;background:#101823;border-radius:7px;margin:.45rem 0;overflow-wrap:anywhere;cursor:pointer}
+.item.active{border-color:var(--blue)}.tag{border:1px solid #45556a;padding:.1rem .35rem;border-radius:4px;font-size:.74rem;color:var(--muted)}
+.post{background:#101823;border:1px solid #344154;padding:.8rem;border-radius:8px;margin-bottom:.7rem;overflow-wrap:anywhere}
+.post .body{white-space:pre-wrap;font-size:.88rem}.post .meta{color:var(--blue);font-size:.82rem;margin-bottom:.4rem}
+.flag{color:var(--warn)}.ok{color:var(--green)}.scroll{max-height:64vh;overflow-y:auto}.status{font-size:.82rem;margin-top:.5rem;color:var(--warn);white-space:pre-wrap}
+code{font-size:.85rem;color:#9de9ce}label{font-size:.83rem;color:#bbc9d7} .space{margin-top:.75rem} .switch{width:auto}
+#vmLab{max-width:1300px;margin:0 auto 1.5rem;padding:1rem}
+#vmLab .vmcolumns{display:grid;grid-template-columns:minmax(320px,1.3fr) minmax(280px,1fr);gap:1rem}
+#vmLab textarea{min-height:170px;font-family:ui-monospace,monospace}
+#vmLab pre{background:#080e15;border:1px solid #30445a;border-radius:8px;padding:1rem;white-space:pre-wrap;word-break:break-word;max-height:350px;overflow-y:auto}
+#vmLab a{color:var(--blue)}
+#vmLab .vmmark{color:var(--warn);font-weight:600}
+@media(max-width:750px){#vmLab .vmcolumns{grid-template-columns:1fr}}
+@media(max-width:1100px){main{grid-template-columns:1fr 1fr}main section:nth-child(2){grid-column:2}}@media(max-width:700px){main{display:flex;flex-direction:column}}
+</style></head><body>
+<header><div><h1>918 TECHNOLOGIES / EV1L 1NSPECTOR GADG3T</h1><small>Local GGUF Agency Forum · Evidence-driven device test lab</small></div>
+<div class="row"><input id="key" type="password" autocomplete="off" placeholder="Agency admin key" aria-label="Agency admin key"><button id="connect">Connect</button></div></header>
+<main>
+<section><h2>Agency threads</h2><small>OS designs • red-team lab • defensive tests • cooperative swarms</small>
+<div id="threadList" class="scroll"></div><div class="line"></div>
+<h3>New research thread</h3><label for="title">Title</label><input id="title" maxlength="120" value="ESP32-S3 micro-OS with live UART test modules">
+<label for="category">Category</label><select id="category"><option value="os-design">OS design</option><option value="red-team-lab">Authorized red-team lab</option><option value="defense">Defense</option><option value="swarm">Cooperative swarm</option><option value="hardware-test">Hardware test</option></select>
+<label for="question">Requirements</label><textarea id="question">Design a Linux-inspired ESP32-S3 FreeRTOS agent runtime with a diagnostic UART plug-in, authenticated lab gateway, resource budget, and repeatable acceptance tests. Separate simulated from device-reported observations.</textarea><button class="primary" id="newThread">Create thread</button>
+</section>
+<section><h2 id="threadTitle">Select a thread</h2><small id="threadMeta">Agents draft designs; only approved jobs can touch physical devices.</small>
+<div class="row space"><button class="primary" id="debate">Run six-agent review</button><button id="nextResearch">Create autonomous research thread</button><button id="refresh">Refresh</button></div>
+<div id="postList" class="space scroll"></div><div class="line"></div><h3>Operator input</h3><textarea id="message" placeholder="Add requirements or engineering feedback"></textarea><button id="post">Post to thread</button>
+<div class="line"></div><h3>Role endpoints</h3><small>Local GGUF API endpoints, one per role if desired. Default: 127.0.0.1:8081/v1</small>
+<div class="row"><select id="role"><option>OS Architect</option><option>Red Team</option><option>Blue Team</option><option>Firmware Engineer</option><option>Swarm Coordinator</option><option>Evidence Judge</option></select><input id="model" value="local" aria-label="Model identifier"></div>
+<input id="endpoint" value="http://127.0.0.1:8081/v1" aria-label="LLM endpoint"><button id="setModel">Set role model</button>
+</section>
+<section><h2>Live hardware lab</h2><small>ESP32-S3 · CYD · Linux bridges · any authorized 3-wire TTL UART peripheral</small>
+<div id="deviceList" class="scroll"></div><div class="line"></div><h3>Enroll an endpoint</h3>
+<label for="deviceName">Device / attached peripheral</label><input id="deviceName" placeholder="S3 to UART sensor bench">
+<select id="deviceKind"><option value="esp32-s3">ESP32-S3</option><option value="cyd">CYD</option><option value="uart-peripheral">Generic UART device</option><option value="linux-host">Linux USB-to-TTL bridge</option><option value="other">Other UART gateway</option></select>
+<button id="enroll">Enroll device</button><div id="enrollSecret" class="status"></div>
+<div class="line"></div><h3>Hardware job</h3>
+<label for="deviceTarget">Target</label><select id="deviceTarget"></select>
+<label for="testOp">Operation</label><select id="testOp"><option value="ping">Bridge port check</option><option value="uart_capture">UART capture (RX only)</option><option value="uart_tx">Allowlisted TX diagnostic</option></select>
+<div class="row"><label>Duration (ms)<input id="duration" type="number" value="500" min="100" max="2500"></label><label>Max RX bytes<input id="maxBytes" type="number" value="256" min="1" max="1024"></label></div>
+<label for="hex">TX frame (hex; must already be in device policy)</label><input id="hex" placeholder="50494E470A"><label><input class="switch" id="confirmTx" type="checkbox"> I approve transmitting the listed diagnostic frame</label>
+<button id="submitTest" class="primary">Queue approved test</button>
+<div class="line"></div><h3>Coordinated device swarm</h3><small>Ctrl/Command-select multiple enrolled endpoints. Only bridge checks or passive UART capture are permitted.</small>
+<select id="swarmDevices" multiple size="4" aria-label="Swarm device selection"></select>
+<select id="swarmOp"><option value="ping">Check bridge endpoints</option><option value="uart_capture">Capture UART on all selected endpoints</option></select>
+<button id="swarmTest">Run coordinated diagnostics</button><div class="line"></div><h3>TX policy (admin)</h3><small>Disabled by default. Add exact diagnostic frames, separated by commas.</small>
+<label><input class="switch" id="txEnabled" type="checkbox"> Enable TX for selected device</label><input id="txAllowlist" placeholder="50494E470A, 5354415455533F0A"><button id="savePolicy">Save TX policy</button>
+<div class="line"></div><h3>Test evidence</h3><div id="jobs" class="scroll"></div><p class="muted">Device-reported evidence is distinct from independently validated hardware acceptance. Never connect ±12 V RS-232 directly to an ESP32 UART.</p>
+</section></main>
+<section id="vmLab" aria-label="Internal Computer research laboratory">
+  <h2>Internal Computer · 16-bit virtual experimentation lab</h2>
+  <p class="muted">Run safe assembly simulations, attach replay evidence to the active forum thread, and optionally link a separately completed ESP32/CYD/UART hardware job. <span class="vmmark">SIMULATION IS NOT HARDWARE ACCEPTANCE.</span></p>
+  <p><a href="/vm/" target="_blank" rel="noopener noreferrer">Open full virtual workstation (file explorer, terminal, assembler and RAM inspector)</a></p>
+  <div class="vmcolumns">
+    <div><h3>Program editor and examples</h3>
+      <label for="vmExample">Curated offline experiment</label>
+      <div class="row"><select id="vmExample" aria-label="Virtual experiment example"></select><button id="vmLoad">Load example</button></div>
+      <label for="vmSavedPrograms">Import saved .asm from the full virtual workstation</label>
+      <div class="row"><select id="vmSavedPrograms" aria-label="Saved program from browser virtual disk"></select><button id="vmImport">Import saved program</button></div>
+      <label for="vmName">Experiment name</label><input id="vmName" maxlength="100" value="UART guard simulation">
+      <label for="vmSource">Virtual assembly (cannot address real pins or devices)</label><textarea id="vmSource" spellcheck="false" maxlength="16384" placeholder="PRINT &quot;hello&quot;&#10;HALT"></textarea>
+      <label for="vmSteps">Maximum instructions</label><input id="vmSteps" type="number" value="10000" min="1" max="100000">
+      <div class="row"><button class="primary" id="vmRun">Run on server VM</button><button id="vmPropose">Ask selected GGUF role to propose a VM experiment</button></div>
+      <p class="muted">Server VM replay needs Node.js 18+. Browser workstation still works without Node. GGUF proposal requires your configured model server.</p>
+    </div>
+    <div><h3>Evidence and hardware comparison</h3>
+      <label for="vmRunList">Saved simulation runs</label><select id="vmRunList"></select>
+      <button id="vmView">View selected replay evidence</button>
+      <pre id="vmResult" role="status">Connect to load VM examples and replay history.</pre>
+      <label for="vmHardwareJob">Completed device-reported hardware job</label><select id="vmHardwareJob"></select>
+      <button id="vmLink">Link simulated result to hardware evidence</button>
+      <p id="vmStatus" class="status" role="status"></p>
+      <h3>GGUF proposal</h3><pre id="vmProposal">Agent proposals are drafts, not executed programs or test evidence.</pre>
+    </div>
+  </div>
+</section><div id="status" role="status" class="status" style="padding:0 1rem 1rem"></div>
+<script>
+const el=id=>document.getElementById(id);let selected=null,overview=null,lastKey='';
+function value(id){return el(id).value.trim()}function line(tag,txt,cls){const e=document.createElement(tag);e.textContent=String(txt);if(cls)e.className=cls;return e}
+function err(msg){el('status').textContent=msg}
+async function api(path,method='GET',body){const key=value('key');if(!key)throw Error('Enter the admin key');const r=await fetch(path,{method,headers:{'x-agency-key':key,'content-type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});if(!r.ok){let s=await r.text();throw Error(r.status+' '+s.slice(0,350))}return r.json()}
+async function safe(fn){try{await fn();err('')}catch(e){err(e.message)}}
+function cell(title,sub,onclick){const div=line('div','', 'item');div.append(line('strong',title));div.append(line('div',sub,'muted'));if(onclick)div.addEventListener('click',onclick);return div}
+async function refresh(){overview=await api('/api/overview');const threads=el('threadList');threads.replaceChildren();for(const t of overview.threads){const c=cell(t.title,'#'+t.id+' · '+t.category,()=>safe(()=>loadThread(t.id)));if(t.id===selected)c.classList.add('active');threads.append(c)}
+const dl=el('deviceList');dl.replaceChildren();const sel=el('deviceTarget'),old=sel.value;sel.replaceChildren();for(const d of overview.devices){const online=d.online?'ONLINE':'OFFLINE';dl.append(cell(d.name,`${d.id} · ${d.kind} · ${online} · TX ${d.tx_enabled?'ENABLED':'disabled'}`));const opt=document.createElement('option');opt.value=d.id;opt.textContent=d.name+' ('+online+')';sel.append(opt)}if(overview.devices.some(d=>d.id===old))sel.value=old;
+const swarmSelect=el('swarmDevices'),swarmChosen=new Set(Array.from(swarmSelect.selectedOptions).map(o=>o.value));swarmSelect.replaceChildren();for(const d of overview.devices){const opt=document.createElement('option');opt.value=d.id;opt.textContent=d.name+' ('+(d.online?'online':'offline')+')';opt.selected=swarmChosen.has(d.id);swarmSelect.append(opt)}
+const jobs=el('jobs');jobs.replaceChildren();for(const j of overview.jobs.slice(0,25)){const txt=`${j.id} · ${j.operation} · ${j.status}${j.evidence_sha256?' · sha256 '+j.evidence_sha256.slice(0,12):''}`;const c=cell(txt,j.device_id+' · '+(j.result||'Pending').slice(0,250));jobs.append(c)}
+if(selected)await loadThread(selected,false);
+updateVMLists();
+}
+async function loadThread(id,reset=true){const t=await api('/api/threads/'+id);selected=id;el('threadTitle').textContent=t.title;el('threadMeta').textContent=t.category+' · '+t.question;const list=el('postList');list.replaceChildren();for(const p of t.posts){const c=document.createElement('div');c.className='post';c.append(line('div',p.author+' · '+p.provenance,'meta'));c.append(line('div',p.body,'body'));list.append(c)}if(reset)await refresh()}
+let vmExamples=[], vmRuns=[], vmActive=null;
+function updateVMLists(){
+  if(!overview)return;
+  vmRuns=overview.vm_runs || [];
+  const runs=el('vmRunList'), prev=runs.value;
+  runs.replaceChildren();
+  for(const r of vmRuns){const opt=document.createElement('option');opt.value=r.id;opt.textContent=r.name+' ['+r.result.outcome+']';runs.append(opt)}
+  if(vmRuns.some(r=>r.id===prev))runs.value=prev;
+  else if(vmActive && vmRuns.some(r=>r.id===vmActive))runs.value=vmActive;
+  const jobs=el('vmHardwareJob'), old=jobs.value;
+  jobs.replaceChildren();
+  for(const j of overview.jobs){
+    if(!['passed','failed'].includes(j.status)||!j.evidence_sha256)continue;
+    if((j.thread_id ?? null)!==(selected ?? null))continue;
+    const opt=document.createElement('option');opt.value=j.id;opt.textContent=j.device_id+' / '+j.operation+' / '+j.status;jobs.append(opt);
+  }
+  if(Array.from(jobs.options).some(o=>o.value===old))jobs.value=old;
+}
+async function loadVMExamples(){
+  const payload=await api('/api/vm/examples');
+  vmExamples=payload.examples;
+  const list=el('vmExample');list.replaceChildren();
+  for(const e of vmExamples){const opt=document.createElement('option');opt.value=e.id;opt.textContent=e.name;list.append(opt)}
+  if(vmExamples.length){el('vmExample').value=vmExamples[0].id;setExample()}
+  el('vmStatus').textContent=payload.server_replay_available?'Node.js server replay available':'Node.js server replay unavailable; full browser VM still available';
+}
+function listSavedPrograms(){
+  const list=el('vmSavedPrograms');list.replaceChildren();
+  let saved=null;
+  try{saved=JSON.parse(localStorage.getItem('internal-computer-v1-filesystem')||'null')}catch(e){el('vmStatus').textContent='Could not read local virtual disk: '+e.message;return}
+  const entries=saved?.entries || {};
+  const paths=Object.keys(entries).filter(p=>p.endsWith('.asm')&&entries[p]?.type==='file').sort();
+  for(const p of paths){const opt=document.createElement('option');opt.value=p;opt.textContent=p;list.append(opt)}
+  if(!paths.length){const opt=document.createElement('option');opt.value='';opt.textContent='No saved .asm files yet';list.append(opt)}
+}
+function importSavedProgram(){
+  const p=value('vmSavedPrograms');if(!p)throw Error('Save an .asm program in the workstation first');
+  const snapshot=JSON.parse(localStorage.getItem('internal-computer-v1-filesystem')||'null');
+  const entry=snapshot?.entries?.[p];if(!entry||entry.type!=='file'||typeof entry.content!=='string')throw Error('Program no longer exists on disk');
+  if(new TextEncoder().encode(entry.content).length>16384)throw Error('Program exceeds server replay limit of 16 KiB');
+  el('vmName').value=p.split('/').pop();el('vmSource').value=entry.content;
+  el('vmStatus').textContent='Imported browser-local source '+p+'. Run will create simulated evidence only.';
+}
+function setExample(){const chosen=vmExamples.find(x=>x.id===value('vmExample'));if(!chosen)return;el('vmName').value=chosen.name;el('vmSource').value=chosen.source;el('vmStatus').textContent=chosen.description}
+function showVM(r){vmActive=r.id;el('vmResult').textContent=JSON.stringify({id:r.id,name:r.name,provenance:r.provenance,source_sha256:r.source_sha256,evidence_sha256:r.result_sha256,result:r.result},null,2);el('vmStatus').textContent='VM run '+r.id+' is a simulation only. Real hardware was not touched.';}
+el('vmLoad').onclick=setExample;
+el('vmSavedPrograms').addEventListener('focus',listSavedPrograms);
+el('vmImport').onclick=()=>safe(async()=>{importSavedProgram()});
+el('vmRun').onclick=()=>safe(async()=>{
+  const r=await api('/api/vm/runs','POST',{name:value('vmName'),source:el('vmSource').value,max_steps:Number(value('vmSteps')),thread_id:selected});
+  showVM(r);await refresh();
+});
+el('vmView').onclick=()=>safe(async()=>{const id=value('vmRunList');if(!id)throw Error('No saved VM runs');showVM(await api('/api/vm/runs/'+encodeURIComponent(id)))});
+el('vmPropose').onclick=()=>safe(async()=>{
+  if(!selected)throw Error('Select a forum thread before requesting a GGUF VM proposal');
+  el('vmProposal').textContent='Requesting a human-reviewable VM experiment from the configured model…';
+  const r=await api('/api/vm/proposals','POST',{thread_id:selected,role:value('role')});
+  el('vmProposal').textContent=r.proposal;await refresh();
+});
+el('vmLink').onclick=()=>safe(async()=>{
+  const runId=vmActive || value('vmRunList'), jobId=value('vmHardwareJob');
+  if(!runId||!jobId)throw Error('Select a VM replay and a completed hardware job in the same forum thread');
+  const r=await api('/api/vm/runs/'+encodeURIComponent(runId)+'/link-hardware','POST',{job_id:jobId});
+  el('vmStatus').textContent='Evidence linked: '+r.vm_run_id+' ⇔ '+r.job_id+'; comparison only, physical_validation=false';await refresh();
+});
+el('connect').onclick=()=>safe(async()=>{await refresh();await loadVMExamples();listSavedPrograms()});el('refresh').onclick=()=>safe(refresh);
+el('newThread').onclick=()=>safe(async()=>{const r=await api('/api/threads','POST',{title:value('title'),category:value('category'),question:value('question')});selected=r.id;await refresh()});
+el('nextResearch').onclick=()=>safe(async()=>{const r=await api('/api/research/next','POST');selected=r.thread_id;await refresh()});
+el('debate').onclick=()=>safe(async()=>{if(!selected)throw Error('Select a thread');const r=await api('/api/threads/'+selected+'/debate','POST');err('Started '+r.debate_id)});
+el('post').onclick=()=>safe(async()=>{if(!selected)throw Error('Select a thread');await api('/api/threads/'+selected+'/posts','POST',{author:'Operator',body:value('message')});el('message').value='';await refresh()});
+el('setModel').onclick=()=>safe(async()=>{await api('/api/models/'+encodeURIComponent(value('role')),'PUT',{url:value('endpoint'),model:value('model')})});
+el('enroll').onclick=()=>safe(async()=>{const r=await api('/api/devices/enroll','POST',{name:value('deviceName'),kind:value('deviceKind'),capabilities:{protocol:'uart-ttl',electrical_levels:'requires_operator_verification'}});el('enrollSecret').textContent='Save securely now; device token shown once. ID: '+r.device_id+' / TOKEN: '+r.device_token;await refresh()});
+el('swarmTest').onclick=()=>safe(async()=>{const ids=Array.from(el('swarmDevices').selectedOptions).map(o=>o.value);if(!ids.length)throw Error('Select at least one device');const r=await api('/api/swarms/diagnostics','POST',{device_ids:ids,thread_id:selected,operation:value('swarmOp'),duration_ms:Number(value('duration')),max_bytes:Number(value('maxBytes'))});err('Queued '+r.batch_id+' / '+r.job_ids.length+' devices');await refresh()});
+el('savePolicy').onclick=()=>safe(async()=>{const id=value('deviceTarget');if(!id)throw Error('Enroll/select a device');const approved=value('txAllowlist').split(',').map(v=>v.trim()).filter(Boolean);await api('/api/devices/'+encodeURIComponent(id)+'/policy','PUT',{tx_enabled:el('txEnabled').checked,allowlist_hex:approved});await refresh()});
+el('submitTest').onclick=()=>safe(async()=>{const op=value('testOp');const body={device_id:value('deviceTarget'),thread_id:selected,operation:op,duration_ms:Number(value('duration')),max_bytes:Number(value('maxBytes'))};if(op==='uart_tx'){body.tx_hex=value('hex');body.confirm_write=el('confirmTx').checked}const r=await api('/api/tests','POST',body);err('Queued '+r.job_id);await refresh()});
+setInterval(()=>{if(value('key'))refresh().catch(e=>err(e.message))},4000);
+</script></body></html>
