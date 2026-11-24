@@ -80,3 +80,9 @@ Read [IP/IP_REGISTER.md](IP/IP_REGISTER.md), [IP/RIGHTS_PROVENANCE.md](IP/RIGHTS
 This publication reconstructs a single browsable tree from four previously created archived releases: `internal_computer_source.zip`, `NTL_Internal_Computer_Source_v1_1.zip`, `Evil_Agency_Lab_Internal_Computer_v0.2.0.zip`, and `Evil_Inspector_Gadget_RedLab_OS_v0.1.0.zip`. Source archive hashes and provenance are recorded in `IP/RIGHTS_PROVENANCE.md`; file-level hashes appear in `SHA256SUMS` and `RELEASE_MANIFEST.json`. The earlier UART swarm source is represented by the directly derived Agency Lab v0.2.0 release, with an original-manifest reference preserved in `integrations/agency-lab/docs/`.
 
 No previously existing projects were modified by this repository package; it is a separate publishable source collection.
+
+## Validation record
+
+Historical milestones are separated by category. The project owner confirms that physical dual-device computation, device communication within the tested scope, distributed job execution, and GPU tests passed. The current recovered signed relay ping artifacts verify relay communication only; recovered Kaggle evidence verifies two Tesla T4 GPU allocation, workload execution, result checks, and utilization sampling. These do not establish ESP32 integration or full SkyNet end-to-end operation. Host-independent computation remains a separate research objective. See the private authoritative [SkyNet OS Core validation registry](https://github.com/BlockChain-BailBonds/SkyNet-OS-Core/tree/main/registries) for evidence scope and digests.
+
+© 2026 Matthew Blake Ward / 918 Technologies. All rights reserved.
